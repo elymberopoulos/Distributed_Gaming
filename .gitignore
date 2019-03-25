@@ -9,5 +9,5 @@ platforms
 plugins
 res
 node_modules
-www/js/webpack_output
+js/webpack_output
 ul_web_hooks
