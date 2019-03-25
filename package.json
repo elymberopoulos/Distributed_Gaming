@@ -4,8 +4,26 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
+    "start": "node ./server/server.js",
+    "server": "nodemon ./server/server.js",
+    "compile": "webpack ./js/index.js --watch"
+},
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "css-loader": "^2.1.1",
+    "jquery": "^3.3.1",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-loader": "^8.0.5",
+    "nodemon": "^1.18.10"
+  }
 }
