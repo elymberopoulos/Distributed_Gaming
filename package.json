@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./server/server.js",
-    "heroku-postbuild": "webpack -p",
+    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress",
     "dev": "nodemon ./server/server.js",
     "compile": "webpack ./public/js/index.js --watch"
   },
@@ -15,9 +15,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4",
     "css-loader": "^2.1.1",
+    "express": "^4.16.4",
     "jquery": "^3.3.1",
+    "jsnes": "^1.1.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "style-loader": "^0.23.1",
