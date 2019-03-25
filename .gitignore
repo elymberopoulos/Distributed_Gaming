@@ -1,2 +1,13 @@
 Node_Modules
 package-lock.json
+.DS_Store
+node_modules/
+*.log
+package-lock.json
+hooks
+platforms
+plugins
+res
+node_modules
+js/webpack_output
+ul_web_hooks
