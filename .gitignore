@@ -11,3 +11,4 @@ res
 node_modules
 js/webpack_output
 ul_web_hooks
+public/js/webpack_output
