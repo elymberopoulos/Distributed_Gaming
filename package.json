@@ -5,9 +5,13 @@
   "main": "index.js",
   "scripts": {
     "start": "node ./server/server.js",
-    "server": "nodemon ./server/server.js",
-    "compile": "webpack ./js/index.js --watch"
-},
+    "heroku-postbuild": "webpack -p --config ./webpack.prod.config.js --progress",
+    "dev": "nodemon ./server/server.js",
+    "compile": "webpack ./public/js/index.js --watch"
+  },
+  "engines": {
+    "node": "10.14.2"
+  },
   "author": "",
   "license": "ISC",
   "dependencies": {

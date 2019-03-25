@@ -1,8 +1,8 @@
 const fs = require('fs');
 module.exports = {
-    entry: './js/index.js',
+    entry: './public/js/index.js',
     output: {
-        path: __dirname + "./js/webpack_output",
+        path: __dirname + "/public/js/webpack_output",
         filename: 'webpackOutput.js'
     },
     module: {
