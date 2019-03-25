@@ -8,7 +8,7 @@ function loadRom() {
 
     });
 
-    var romData = fs.readFileSync('./rom/Legend_of_Zelda', { encoding: 'binary' });
+    var romData = fs.readFileSync('./rom/Legend_of_Zelda.nes', { encoding: 'binary' });
 
     nes.loadROM(romData);
     nes.frame();
