@@ -14,7 +14,7 @@ var server = http.createServer(app);
 
 app.use(express.static(publicDir));//Express will use static middleware
 
-var game = emulator.Emulator();
+// var game = emulator.Emulator();
 // var canvas = new Canvas.createCanvas(emulator.SCREEN_HEIGHT, emulator.SCREEN_WIDTH);
 
 //Have server listen on specified port
