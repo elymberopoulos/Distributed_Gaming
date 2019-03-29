@@ -26,12 +26,12 @@ var SAMPLE_MASK = SAMPLE_COUNT - 1;
 var audio_samples_L = new Float32Array(SAMPLE_COUNT);
 var audio_samples_R = new Float32Array(SAMPLE_COUNT);
 var audio_write_cursor = 0, audio_read_cursor = 0;
+var canvas = new Canvas.createCanvas(SCREEN_HEIGHT, SCREEN_WIDTH);
 
 //Get the rom data into a binary
 var rom_data = fs.readFileSync(__dirname + '/rom/Legend_of_Zelda.nes', { encoding: 'binary' });
 
 function Emulator() {
-	var canvas = new Canvas.createCanvas(emulator.SCREEN_HEIGHT, emulator.SCREEN_WIDTH);
 	//INITIALIZE NEW NES OBJECT
 	var nes = new jsnes.NES({
 		onFrame: function (framebuffer_24) {
@@ -43,6 +43,7 @@ function Emulator() {
 			audio_write_cursor = (audio_write_cursor + 1) & SAMPLE_MASK;
 		},
 	});
+	return nes;
 }
 
 Emulator.prototype.onAnimationFrame = function () {
@@ -138,7 +139,7 @@ module.exports = {
 	SCREEN_WIDTH,
 	SCREEN_HEIGHT,
 	FRAMEBUFFER_SIZE,
-	canvas_ctx,
+	canvas,
 	image,
 	framebuffer_u8,
 	framebuffer_u32,
