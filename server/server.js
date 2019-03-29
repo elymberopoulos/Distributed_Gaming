@@ -14,8 +14,7 @@ var server = http.createServer(app);
 
 app.use(express.static(publicDir));//Express will use static middleware
 
-// var game = emulator.Emulator();
-// var canvas = new Canvas.createCanvas(emulator.SCREEN_HEIGHT, emulator.SCREEN_WIDTH);
+var game = emulator.Emulator();
 
 //Have server listen on specified port
 server.listen(port, () => {
@@ -23,6 +22,28 @@ server.listen(port, () => {
 });
 
 var io = socketIO(server);
+
+//The socket parameter is the connection between the client and the server.
 io.on('connection', (socket) => {
     console.log('new user connection...');
+
+//When the user inputs a command from the client this is where it is handled and passed to emulator running the game.
+    socket.on('command', (userCommand)=>{
+        game.keyboard(userCommand);
+        console.log(`Command ${userCommand} issued to game.`);
+    });
 });
+
+/*
+Set an interval for the emulator frames to be emitted from the server to all connected clients.
+The clients will get the buffer array and set the canvas image with the buffer array.
+*/
+setInterval(() => {
+    canvas.toBuffer((error, bufferArray) => {
+        if (error) {
+            console.log(`Canvas.toBuffer error is: ${error}`);
+            throw error;
+        }
+        io.emit('frame', bufferArray);
+    });
+}, 50); //20 FPS
