@@ -12,4 +12,8 @@ socket.on('connect', () => {
     console.log("Connected to server.");
 });
 
+socket.on('frame', (frame) => {
+    console.log(`Frame received: ${frame}`);
+});
+
 
