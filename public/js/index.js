@@ -12,6 +12,10 @@ socket.on('connect', () => {
     console.log("Connected to server.");
 });
 
+socket.on('userDisconnect', (currentUsers) => {
+    console.log(`A user disconnected ${currentUsers} remaining`);
+});
+
 socket.on('frame', (frame) => {
     console.log(`Frame received: ${frame}`);
 });
