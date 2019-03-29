@@ -13,9 +13,12 @@ var server = http.createServer(app);
 
 app.use(express.static(publicDir));//Express will use static middleware
 
+var currentUsers = 0;//variable to track the total current users on the server
+
 //Emulator Variables
 var game = emulator.Emulator();//Main game
 var canvas = emulator.canvas;//Canvas that server displays to
+
 
 //Have server listen on specified port
 server.listen(port, () => {
@@ -27,12 +30,21 @@ var io = socketIO(server);
 //The socket parameter is the connection between the client and the server.
 io.on('connection', (socket) => {
     console.log('new user connection...');
+    currentUsers++;
+    console.log(`Total users on server ${currentUsers}`);
 
-//When the user inputs a command from the client this is where it is handled and passed to emulator running the game.
-    socket.on('command', (userCommand)=>{
+    //When the user inputs a command from the client this is where it is handled and passed to emulator running the game.
+    socket.on('command', (userCommand) => {
         game.keyboard(userCommand);
         console.log(`Command ${userCommand} issued to game.`);
     });
+
+    //When a user disconnects then the total user counter is decremented and every socket is notified
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+        currentUsers--;
+        io.emit('userDisconnect', currentUsers);
+    })
 });
 
 /*
@@ -48,3 +60,4 @@ setInterval(() => {
         io.emit('frame', bufferArray);
     });
 }, 50); //20 FPS
+
