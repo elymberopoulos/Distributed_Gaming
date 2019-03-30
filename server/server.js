@@ -18,6 +18,8 @@ var currentUsers = 0;//variable to track the total current users on the server
 //Emulator Variables
 var game = emulator.Emulator();//Main game
 var canvas = emulator.canvas;//Canvas that server displays to
+var rom = emulator.rom_data;
+// game.nes_init
 
 
 //Have server listen on specified port

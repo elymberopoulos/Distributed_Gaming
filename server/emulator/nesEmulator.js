@@ -28,6 +28,8 @@ var audio_samples_R = new Float32Array(SAMPLE_COUNT);
 var audio_write_cursor = 0, audio_read_cursor = 0;
 var canvas = new Canvas.createCanvas(SCREEN_HEIGHT, SCREEN_WIDTH);
 
+
+
 //Get the rom data into a binary
 var rom_data = fs.readFileSync(__dirname + '/rom/Legend_of_Zelda.nes', { encoding: 'binary' });
 
@@ -46,6 +48,17 @@ function Emulator() {
 	return nes;
 }
 
+//LOAD ROM INTO EMULATOR
+Emulator.prototype.nes_boot = function (rom_data) {
+	nes.loadROM(rom_data);
+	// window.requestAnimationFrame(onAnimationFrame);
+}
+//
+Emulator.prototype.nes_load_data = function (canvas_id, rom_data) {
+	nes_init(canvas_id);
+	nes_boot(rom_data);
+}
+
 Emulator.prototype.onAnimationFrame = function () {
 	// window.requestAnimationFrame(onAnimationFrame);
 	// image.data.set(framebuffer_u8);
@@ -56,29 +69,9 @@ Emulator.prototype.onAnimationFrame = function () {
 	Instead of setting the framebuffer to the image
 	return it so it can be emitted over the broadcasting channels. 
 	*/
-	this.canvas.toBuffer()
-}
-Emulator.prototype.audio_remain = function () {
-	return (audio_write_cursor - audio_read_cursor) & SAMPLE_MASK;
+	return canvas.toBuffer();
 }
 
-Emulator.prototype.audio_callback = function () {
-	var dst = event.outputBuffer;
-	var len = dst.length;
-
-	// Attempt to avoid buffer underruns.
-	if (audio_remain() < AUDIO_BUFFERING) nes.frame();
-
-	var dst_l = dst.getChannelData(0);
-	var dst_r = dst.getChannelData(1);
-	for (var i = 0; i < len; i++) {
-		var src_idx = (audio_read_cursor + i) & SAMPLE_MASK;
-		dst_l[i] = audio_samples_L[src_idx];
-		dst_r[i] = audio_samples_R[src_idx];
-	}
-
-	audio_read_cursor = (audio_read_cursor + len) & SAMPLE_MASK;
-}
 
 Emulator.prototype.nes_init = function (canvas_id) {
 	// var canvas = document.getElementById(canvas_id);
@@ -94,21 +87,12 @@ Emulator.prototype.nes_init = function (canvas_id) {
 	framebuffer_u32 = new Uint32Array(buffer);
 
 	// Setup audio.
-	var audio_ctx = new window.AudioContext();
+	// var audio_ctx = new window.AudioContext();
 	var script_processor = audio_ctx.createScriptProcessor(AUDIO_BUFFERING, 0, 2);
 	script_processor.onaudioprocess = audio_callback;
 	script_processor.connect(audio_ctx.destination);
 }
-Emulator.prototype.nes_boot = function (rom_data) {
-	nes.loadROM(rom_data);
-	// window.requestAnimationFrame(onAnimationFrame);
 
-}
-
-Emulator.prototype.nes_load_data = function (canvas_id, rom_data) {
-	nes_init(canvas_id);
-	nes_boot(rom_data);
-}
 
 Emulator.prototype.keyboard = function (callback, event) {
 	var player = 1;
@@ -134,6 +118,29 @@ Emulator.prototype.keyboard = function (callback, event) {
 		default: break;
 	}
 }
+
+Emulator.prototype.audio_remain = function () {
+	return (audio_write_cursor - audio_read_cursor) & SAMPLE_MASK;
+}
+
+Emulator.prototype.audio_callback = function () {
+	var dst = event.outputBuffer;
+	var len = dst.length;
+
+	// Attempt to avoid buffer underruns.
+	if (audio_remain() < AUDIO_BUFFERING) nes.frame();
+
+	var dst_l = dst.getChannelData(0);
+	var dst_r = dst.getChannelData(1);
+	for (var i = 0; i < len; i++) {
+		var src_idx = (audio_read_cursor + i) & SAMPLE_MASK;
+		dst_l[i] = audio_samples_L[src_idx];
+		dst_r[i] = audio_samples_R[src_idx];
+	}
+
+	audio_read_cursor = (audio_read_cursor + len) & SAMPLE_MASK;
+}
+
 module.exports = {
 	Emulator,
 	SCREEN_WIDTH,
@@ -149,5 +156,6 @@ module.exports = {
 	audio_samples_L,
 	audio_samples_R,
 	audio_write_cursor,
-	audio_read_cursor
+	audio_read_cursor,
+	rom_data
 }

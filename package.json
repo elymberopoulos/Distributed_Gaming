@@ -7,7 +7,8 @@
     "start": "node ./server/server.js",
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "dev": "nodemon ./server/server.js",
-    "compile": "webpack ./public/js/index.js --watch"
+    "compile": "webpack ./public/js/index.js --watch",
+    "test": "nyc mocha --recursive || true"
   },
   "engines": {
     "node": "10.14.2"
@@ -15,6 +16,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "babel-loader": "^8.0.5",
     "canvas": "^2.4.1",
     "css-loader": "^2.1.1",
     "express": "^4.16.4",
@@ -24,12 +28,12 @@
     "socket.io-client": "^2.2.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0",
-    "@babel/core": "^7.4.0",
-    "@babel/preset-env": "^7.4.2",
-    "babel-loader": "^8.0.5"
+    "webpack-cli": "^3.3.0"
   },
   "devDependencies": {
-    "nodemon": "^1.18.10"
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.10",
+    "nyc": "^13.3.0"
   }
 }
