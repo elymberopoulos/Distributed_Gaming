@@ -1,6 +1,5 @@
 # Distributed_Gaming
 
-https://travis-ci.org/kandadaboggu/iprofiler.png?branch=master
-
+[![Build Status](https://travis-ci.com/elymberopoulos/Distributed_Gaming.svg?branch=master)](https://travis-ci.com/elymberopoulos/Distributed_Gaming)
 
 This is a ReadMe
