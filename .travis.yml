@@ -1,0 +1,30 @@
+language: node_js
+
+node_js:
+  - "10"
+  - "9"
+
+# blocklist
+# branches:
+#   except:
+#   - legacy
+#   - experimental
+
+# safelist
+branches:
+  only:
+  - master
+  - stable
+
+before_script:
+  - npm install
+
+# before_install:
+# - echo -e "machine github.com\n  login $GITHUB_TOKEN" > ~/.netrc
+# - git lfs pull
+
+script:
+  - npm run test
+
+
+
