@@ -7,7 +7,8 @@
     "start": "node ./server/server.js",
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "dev": "nodemon ./server/server.js",
-    "compile": "webpack ./public/js/index.js --watch"
+    "compile": "webpack ./public/js/index.js --watch",
+    "test": "nyc mocha --recursive || true"
   },
   "engines": {
     "node": "10.14.2"
@@ -30,7 +31,14 @@
     "webpack-cli": "^3.3.0"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10"
+=======
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
+    "nodemon": "^1.18.10",
+    "nyc": "^13.3.0"
+>>>>>>> da1d5a64fbeab40f7335f69b032617f3b035dccb
   }
 }
