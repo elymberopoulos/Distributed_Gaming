@@ -34,6 +34,7 @@ io.on('connection', (socket) => {
     console.log('new user connection...');
     currentUsers++;
     console.log(`Total users on server ${currentUsers}`);
+    io.emit('userConnected', currentUsers)
 
     //When the user inputs a command from the client this is where it is handled and passed to emulator running the game.
     socket.on('command', (userCommand) => {

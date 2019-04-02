@@ -20,6 +20,7 @@
     "@babel/preset-env": "^7.4.2",
     "babel-loader": "^8.0.5",
     "canvas": "^2.4.1",
+    "concurrently": "^4.1.0",
     "css-loader": "^2.1.1",
     "express": "^4.16.4",
     "jquery": "^3.3.1",
@@ -31,14 +32,9 @@
     "webpack-cli": "^3.3.0"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "mocha": "^6.0.2",
-    "nodemon": "^1.18.10"
-=======
     "chai": "^4.2.0",
     "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "nyc": "^13.3.0"
->>>>>>> da1d5a64fbeab40f7335f69b032617f3b035dccb
   }
 }
