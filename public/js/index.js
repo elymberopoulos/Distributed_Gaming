@@ -3,6 +3,7 @@ require('../css/index.css');
 const $ = require('jquery');
 
 var canvas = $('#nes-canvas');
+var actionButton = $('#actionButton');
 
 //establish connection to server with a socket
 var socket = io();
