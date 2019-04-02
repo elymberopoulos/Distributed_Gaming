@@ -1,0 +1,65 @@
+{
+  "_from": "serverboy",
+  "_id": "serverboy@0.0.4",
+  "_inBundle": false,
+  "_integrity": "sha512-aCmPo0DOLvFYW65Pik+bej2IjC0BhnqPU/GpR84lvf41U8L9xJlSEf18A3S6teha2M1QXoSACvM34YL1fTOPFw==",
+  "_location": "/serverboy",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "serverboy",
+    "name": "serverboy",
+    "escapedName": "serverboy",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/serverboy/-/serverboy-0.0.4.tgz",
+  "_shasum": "2018466f2560087da1e33ef89c6c39c5f5fd34b6",
+  "_spec": "serverboy",
+  "_where": "C:\\Users\\Vestigial_earth",
+  "author": {
+    "name": "Daniel Shumway",
+    "email": "shumway.danny@gmail.com",
+    "url": "http://www.latinforimagination.com/"
+  },
+  "bugs": {
+    "url": "https://github.com/danShumway/serverboy.js/issues"
+  },
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "A gameboy emulator based off of gameboy-online and optimized to run on a server with hooks for scripting and streaming output.",
+  "devDependencies": {
+    "@latinfor/distilled": "^1.0.4",
+    "browserify": "^16.2.3",
+    "express": "^4.16.3",
+    "lodash": "^4.17.11",
+    "pngjs": "^3.3.3",
+    "socket.io": "^2.1.1"
+  },
+  "homepage": "https://github.com/danShumway/serverboy.js",
+  "keywords": [
+    "gameboy",
+    "emulator",
+    "scripting",
+    "pure javascript"
+  ],
+  "license": "GPL 2",
+  "main": "./src/interface.js",
+  "name": "serverboy",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danShumway/serverboy.js.git"
+  },
+  "scripts": {
+    "start": "node ./src/interface.js",
+    "test": "node ./tests/runner.js",
+    "test_generate": "node ./tests/runner.js -- generate"
+  },
+  "version": "0.0.4"
+}
