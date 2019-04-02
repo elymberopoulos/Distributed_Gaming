@@ -7,6 +7,50 @@ const port = process.env.PORT || 8080;//This port will guarantee that when deplo
 const publicDir = path.join(__dirname, '../public');//set public directory path for express to serve up the files
 const emulator = require('./emulator/nesEmulator');
 
+var gameboy = new Gameboy();
+
+var fs = require('fs');
+var rom = fs.readFileSync(file_path);
+
+var file_path = './roms/my_rom.gb'; ///TODO Add proper filepath
+
+
+gameboy.loadRom(rom);
+var rom = fs.readFileSync(file_path);
+
+gameboy.loadRom(rom);
+
+setTimeout(function () {
+
+   //Custom Logic
+    
+   var memory = gameboy.getMemory();
+   if (memory[3000] === 0) {
+       gameboy.pressKeys([Gameboy.KEYMAP.RIGHT]);
+   }
+   
+   gameboy.doFrame();
+}, 0);
+
+var screen = gameboy.getScreen();
+
+//write to canvas
+var canvas = document.querySelector('canvas');
+var ctx = canvas.getContext('2d');
+var data = ctx.createImageData(160, 144);
+for (let i=0; i<screen.length; i++) {
+    data[i] = screen[i];
+}
+ctx.putImageData(data, 0, 0);
+
+//write to PNG (using pngjs)
+var png = new PNG({ width: 160, height: 144 });
+for (let i=0; i<screen.length; i++) {
+   png.data[i] = screen[i];
+}
+
+var buffer = PNG.sync.write(png);
+
 //Create server object and pass it to socketIO so sockets run on server
 var app = express();
 var server = http.createServer(app);
