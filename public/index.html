@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -9,9 +9,8 @@
 </head>
 
 <body>
-    <div style="margin: auto; width: 75%;">
-        <canvas id="nes-canvas" width="256" height="240" style="width: 100%" />
-    </div>
+    <div>Uses socketIO to stream from a remote server.</div>
+    <canvas id="mainCanvas" width="160" height="144"></canvas>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>
 </body>

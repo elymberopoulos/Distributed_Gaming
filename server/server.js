@@ -5,22 +5,13 @@ const express = require('express');
 const socketIO = require('socket.io');
 const port = process.env.PORT || 8080;//This port will guarantee that when deployed an available port will be found
 const publicDir = path.join(__dirname, '../public');//set public directory path for express to serve up the files
-const emulator = require('./emulator/nesEmulator');
+const gameboy = require('serverboy');
 
 //Create server object and pass it to socketIO so sockets run on server
 var app = express();
 var server = http.createServer(app);
-
 app.use(express.static(publicDir));//Express will use static middleware
-
 var currentUsers = 0;//variable to track the total current users on the server
-
-//Emulator Variables
-var game = emulator.Emulator();//Main game
-var canvas = emulator.canvas;//Canvas that server displays to
-var rom = emulator.rom_data;
-// game.nes_init
-
 
 //Have server listen on specified port
 server.listen(port, () => {
@@ -28,6 +19,95 @@ server.listen(port, () => {
 });
 
 var io = socketIO(server);
+
+var currentScreen;
+
+
+//Credit to Dan Shumway for his serverboy code example
+function loadROM(file_path) {
+
+    var rom = fs.readFileSync(file_path);
+
+    //start the rom.
+    var gameboy_instance = new gameboy();
+    gameboy_instance.loadRom(rom);
+
+    // var io; //Handle streaming.
+    var keysToPress = []; //What keys we want pressed.
+
+    var start_io = function () {
+
+        io.on('connection', function (socket) {
+            console.log('connection happened');
+            //Logic for handeling a new connection here.
+
+            //The new connection can send commands.
+            socket.on('keydown', function (data) {
+                var index = keysToPress.indexOf(data.key);
+                if (index === -1) {
+                    keysToPress.push(data.key);
+                }
+            });
+
+            socket.on('keyup', function (data) {
+                var index = keysToPress.indexOf(data.key);
+                if (index !== -1) {
+                    keysToPress.splice(index, 1);
+                }
+            });
+
+            socket.on('restart', function (data) {
+                gameboy_instance.loadROM(rom);
+            });
+
+        });
+    };
+
+    //Handle doing a single frame.
+    //You want to basically time this at about 60fps.
+    var frames = 0; var lastFrame = undefined; var currentFrame = undefined;
+    var audioLoop = [];
+    var emulatorLoop = function () {
+        var start = process.hrtime();
+
+        gameboy_instance.pressKeys(keysToPress);
+        currentScreen = gameboy_instance.doFrame();
+
+        // let currentAudio = gameboy_instance.getAudio();
+
+        //Compress into mono - literally throw away half the frames
+        // for (let i = 0; i < 705; i += 2) {
+        //     audioLoop.push(currentAudio[i]);
+        // }
+
+        frames++;
+        if (frames % 10 === 0) { //Output every 10th frame.
+            if (io) {
+                console.log(frames);
+
+                io.emit('frame', currentScreen);
+                io.emit('memory', gameboy_instance.getMemory());
+                // io.emit('audio', audioLoop);
+                audioLoop = [];
+            }
+        }
+
+        var elapsed = process.hrtime(start)[1] / 1000000;
+        setTimeout(emulatorLoop, 5); //Try and run at about 60fps.
+    };
+
+
+    start_io();
+    emulatorLoop();
+}
+
+
+console.log('starting to load rom');
+var rom = __dirname + '/emulator/rom/Pokemon.gbc';
+loadROM(rom);
+
+
+
 
 //The socket parameter is the connection between the client and the server.
 io.on('connection', (socket) => {
@@ -48,18 +128,4 @@ io.on('connection', (socket) => {
         io.emit('userDisconnect', currentUsers);
     })
 });
-
-/*
-Set an interval for the emulator frames to be emitted from the server to all connected clients.
-The clients will get the buffer array and set the canvas image with the buffer array.
-*/
-setInterval(() => {
-    canvas.toBuffer((error, bufferArray) => {
-        if (error) {
-            console.log(`Canvas.toBuffer error is: ${error}`);
-            throw error;
-        }
-        io.emit('frame', bufferArray);
-    });
-}, 50); //20 FPS
 
