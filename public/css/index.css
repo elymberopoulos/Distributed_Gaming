@@ -1,3 +1,10 @@
+
+
 body{
-    background-color: lightblue
+    background-color: lightblue;
+    overflow: hidden;
+}
+#contentSection{
+    margin-left: 35%;
+    margin-top: 10%;
 }
