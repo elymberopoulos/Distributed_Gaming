@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title>Canvas tutorial</title>
+    <script type="text/javascript">
+      function draw() {
+        var c = document.getElementById("myCanvas");
+	var ctx = c.getContext("2d");
+	ctx.rect(50, 50, 150, 100);	
+	ctx.fill()
+	// Specify the shadow colour.
+	ctx.shadowColor = "black";
+	// Specify the shadow offset.
+	ctx.shadowOffsetX = 2;
+	ctx.shadowOffsetY = 2;
+	ctx.stroke();
+      }
+    </script>
+  </head>
+  <body onload="draw();">
+    <canvas id="myCanvas"></canvas>
+  </body>
+</html>

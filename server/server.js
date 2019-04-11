@@ -31,9 +31,9 @@ var io = socketIO(server);
 
 //The socket parameter is the connection between the client and the server.
 io.on('connection', (socket) => {
+    var totalCount = io.engine.clientsCount.length
     console.log('new user connection...');
-    currentUsers++;
-    console.log(`Total users on server ${currentUsers}`);
+    console.log(`Total users on server ${totalCount}`);
 
     //When the user inputs a command from the client this is where it is handled and passed to emulator running the game.
     socket.on('command', (userCommand) => {
