@@ -6,6 +6,7 @@ const socketIO = require('socket.io');
 const port = process.env.PORT || 8080;//This port will guarantee that when deployed an available port will be found
 const publicDir = path.join(__dirname, '../public');//set public directory path for express to serve up the files
 const gameboy = require('serverboy');
+const randHash = require('random-hash');
 
 //Create server object and pass it to socketIO so sockets run on server
 var app = express();
@@ -17,10 +18,26 @@ server.listen(port, () => {
     console.log(`Server running on port ${port}.`);
 });
 
+//Generate random hash for peer-to-peer connection unique id's
+var randomHash = randHash.generateHash({
+    length: 5
+});
 
 var io = socketIO(server);
 var currentScreen;
 var currentUsers = 0;
+
+function adjustUserCount(value){
+    if(value === "decrement" && currentUsers > 0){
+        return currentUsers -= 1;
+    }
+    else if(value === "increment"){
+        currentUsers += 1;
+    }
+    else{
+        console.log("UserCount error.");
+    }
+}
 
 //Credit to Dan Shumway for his serverboy code example
 var rompath = __dirname + '/emulator/rom/Tetris.gb';
@@ -33,11 +50,15 @@ gameboy_instance.loadRom(rom);
 // var io; //Handle streaming.
 var keysToPress = []; //What keys we want pressed.
 
+
 io.on('connection', function (socket) {
     console.log('connection happened');
-    currentUsers++;
-    io.emit('checkUserCount', currentUsers);
-    //Logic for handeling a new connection here.
+
+    socket.on('incrementCount', (data)=>{
+        adjustUserCount('increment');
+        io.emit('checkUserCount', currentUsers);
+    });
+
 
     //The new connection can send commands.
     socket.on('keydown', function (data) {
@@ -57,8 +78,7 @@ io.on('connection', function (socket) {
     //When a user disconnects then the total user counter is decremented and every socket is notified
     socket.on('disconnect', () => {
         console.log('user disconnected');
-        currentUsers--;
-        io.emit('userDisconnect', currentUsers);
+        io.emit('userDisconnect', adjustUserCount('decrement'));
     });
 
     socket.on('restart', function (data) {
