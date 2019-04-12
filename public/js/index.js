@@ -18,7 +18,8 @@ $(document).ready(() => {
 
     socket.on('connect', () => {
         console.log("Connected to server.");
-    });
+        socket.emit('incrementCount', (1));
+    }); 
 
     socket.on('checkUserCount', (userCount) => {
         console.log(`Total users ${userCount}.`);
