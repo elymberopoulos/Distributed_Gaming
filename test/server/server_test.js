@@ -39,6 +39,16 @@ describe('Suite of unit tests', function() {
         done();
     });
 
+    after(function(done){
+        socket = io.connect(socketURL, {
+            'reconnection delay' : 0
+            , 'reopen delay' : 0
+            , 'force new connection' : true
+        });
+        socket.emit('shutDown');
+        done();
+    })
+
     it('Server should broadcast user count to new users', function(done) {
         socket.on('userConnected',function(userCount){
             assert.equal(userCount,2);
@@ -67,6 +77,7 @@ describe('Suite of unit tests', function() {
         });
     });
 });
+
 
     // it('userDisconnected test', function (done) {
     //     var client1 = io.connect(socketURL);

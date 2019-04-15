@@ -47,6 +47,12 @@ io.on('connection', (socket) => {
         console.log('user disconnected');
         currentUsers--;
         io.emit('userDisconnect', currentUsers);
+    });
+
+    socket.on('shutDown', () => {
+        console.group('Server is Shutting Down');
+        currentUsers = 0;
+        io.close();
     })
 });
 
