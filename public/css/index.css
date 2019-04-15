@@ -1,3 +1,19 @@
 body{
-    background-color: lightblue
+    background-color: lightblue;
+    overflow: hidden;
 }
+#contentSection{
+    margin-left: 35%;
+    margin-top: 10%;
+}
+
+#actionButton {
+    background-color: white;
+    color: black;
+    border: 2px solid #555555;
+  }
+
+#actionButton:hover {
+    background-color: #555555;
+    color: white;
+  }

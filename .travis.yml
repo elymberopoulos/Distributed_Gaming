@@ -10,11 +10,11 @@ node_js:
 #   - legacy
 #   - experimental
 
-# safelist
+# safelist - Build all branches
 branches:
   only:
-  - master
-  - stable
+  - gh-pages
+  - /.*/
 
 before_script:
   - npm install
@@ -24,7 +24,7 @@ before_script:
 # - git lfs pull
 
 script:
-  - npm run test
+  - npm run combinedtest
 
 
 
