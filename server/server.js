@@ -85,7 +85,6 @@ io.on('connection', function (socket) {
     socket.on('shutDown', () => {
         console.group('Server is Shutting Down');
         currentUsers = 0;
-        gameboy_instance = None
         io.close();
     });
 

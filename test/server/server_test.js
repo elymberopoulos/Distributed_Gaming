@@ -63,9 +63,8 @@ describe('Suite of unit tests', function() {
         socket.on('userDisconnect', function(userCount){
             if (userCount != 0){
                 assert.equal(userCount,1);
-            
-            socket.emit('shutDown');
-            done();
+                socket.emit('shutDown');
+                done();
             }
         });
     });
