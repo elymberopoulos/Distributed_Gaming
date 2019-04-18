@@ -3,6 +3,25 @@ require('../css/index.css');
 const $ = require('jquery');
 
 $(document).ready(() => {
+
+
+    var Peer = require("simple-peer")
+    var peer = new Peer({
+
+        initiator: location.hash === '#init',
+        //notifies neighboring peer who is the initiator
+        trickle: false
+        //don't use Turn/Stun servers
+
+    })
+
+    peer.on('signal', data => {
+        // document.getElementById('myID').value = JSON.stringify(data)
+        console.log(`The Simple Peer Data is ${JSON.stringify(data)}.`);
+    })
+
+
+
     //establish connection to server with a socket
     var socket = io();
 
@@ -19,10 +38,13 @@ $(document).ready(() => {
     socket.on('connect', () => {
         console.log("Connected to server.");
         socket.emit('incrementCount', (1));
-    }); 
+    });
 
     socket.on('checkUserCount', (userCount) => {
         console.log(`Total users ${userCount}.`);
+        if(userCount === 1){
+            window.location.href = window.location.href + '/#init';
+        }
     });
 
     socket.on('userDisconnect', (currentUsers) => {

@@ -1,9 +1,9 @@
-var location = {}
+// var location = {}
 
 var Peer = require("simple-peer")
 var peer = new Peer({
 
-	initiator: true,
+	initiator: location.hash === '#init',
 	//notifies neighboring peer who is the initiator
 	trickle:false
 	//don't use Turn/Stun servers
