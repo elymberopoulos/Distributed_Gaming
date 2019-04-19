@@ -31,10 +31,10 @@ var currentScreen;
 var currentUsers = 0;
 
 function adjustUserCount(value) {
-    if (value == 'decrement' && currentUsers > 0) {
+    if (value === 'decrement' && currentUsers > 0) {
         return currentUsers -= 1;
     }
-    else if (value == 'increment') {
+    else if (value === 'increment') {
         currentUsers += 1;
     }
     else {
@@ -130,7 +130,8 @@ var emulatorLoop = function () {
 
     var elapsed = process.hrtime(start)[1] / 1000000;
     setTimeout(emulatorLoop, 5); //Try and run at about 60fps.
-
+    
+    //this runs the timer and if no  users are connected to the server then it starts the timer
     if (currentUsers < 1) {
         if (!timerOn) {
             startTimer();
@@ -140,36 +141,29 @@ var emulatorLoop = function () {
         timerOn = false;
     }
 };
-//this runs the timer and if no  users are connected to the server then it starts the timer
-if (currentUsers == 0) {
-    if (!timerOn) {
-        startTimer();
-    }
-    timer();
-}
+
 //startTimer turns on the timerBoolean and sets the current time
 function startTimer() {
     if (!timerOn) {
-        var date = new Date();
         timerOn = true;
-        startTime = date.getMinutes();
-        previousTime = startTime;
+        startTime = Date.now();
+        previousTime = 0;
     }
 }
 //timer is the main code for the timer and will shutdown the server if it has been inactive for 3 min unless changed at the top by changing serverTimeout
 function timer() {
     if (timerOn) {
-        var date = new Date();
-        var time = date.getMinutes() - startTime;
+        var time = (((Date.now() - startTime)/1000)/60);//mili to seconds to min
+        if ((time - previousTime)>1) {
+            console.log('Inactive time is: ' + time.toPrecision(1) + 'min');
+            previousTime = time;
+        }
         if (time >= serverTimeout) {
-            console.log('Server is shutting Down')
+            console.log('Server is shutting Down');
+            //this is where to add code to be ran before shutdown
             io.close();
             server.close();
             process.exit(0);
-        }
-        if (time != previousTime) {
-            console.log('Inactive time is: ' + time.toString() + 'min');
-            previousTime = time;
         }
     }
 }
