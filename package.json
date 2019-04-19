@@ -9,7 +9,7 @@
     "dev": "nodemon ./server/server.js",
     "compile": "webpack ./public/js/index.js --watch",
     "test": "nyc mocha --recursive --exit || true",
-    "combinedtest": "concurrently \"nodemon ./server/server.js\" \"nyc mocha --recursive --exit || true\""
+    "combinedtest": "concurrently \"node ./server/server.js\" \"nyc mocha --recursive --exit || true\""
   },
   "engines": {
     "node": "10.14.2"
