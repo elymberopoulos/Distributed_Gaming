@@ -32,17 +32,10 @@ var currentScreen;
 var currentUsers = 0;
 
 function adjustUserCount(value) {
-<<<<<<< HEAD
     if (value === "decrement" && currentUsers > 0) {
         return currentUsers -= 1;
     }
     else if (value === "increment") {
-=======
-    if (value === 'decrement' && currentUsers > 0) {
-        return currentUsers -= 1;
-    }
-    else if (value === 'increment') {
->>>>>>> e99bdb77f6650d14f3a1bf1a67d6b77fe6564a83
         currentUsers += 1;
     }
     else {
