@@ -85,7 +85,6 @@ io.on('connection', function (socket) {
     socket.on('disconnect', () => {
         console.log('user disconnected');
         io.emit('userDisconnect', adjustUserCount('decrement'));
-
     });
 
     socket.on('shutDown', () => {
@@ -117,7 +116,7 @@ var emulatorLoop = function () {
     // }
 
     frames++;
-    if (frames % 20 === 0) { //Output every 10th frame.
+    if (frames % 20 === 0) { //Output every 20th frame.
         if (io) {
 
             io.emit('frame', currentScreen);
