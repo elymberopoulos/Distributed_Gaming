@@ -18,6 +18,7 @@ $(document).ready(() => {
     peer.on('signal', data => {
         // document.getElementById('myID').value = JSON.stringify(data)
         console.log(`The Simple Peer Data is ${JSON.stringify(data)}.`);
+        saveToDB(data)
     })
 
 
@@ -122,6 +123,11 @@ $(document).ready(() => {
         }
     }
 });
+
+var saveToDB = id => 
+{
+    
+}
 
 
 
