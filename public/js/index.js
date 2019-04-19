@@ -136,6 +136,11 @@ $(document).ready(() => {
     }
 });
 
+var saveToDB = id => 
+{
+    
+}
+
 
 
 
