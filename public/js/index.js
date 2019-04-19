@@ -1,11 +1,14 @@
 //Webpack will bundle these requires into a JS bundle for index.html to use
 require('../css/index.css');
 const $ = require('jquery');
+const Peer = require("simple-peer")
 
 $(document).ready(() => {
 
 
-    var Peer = require("simple-peer")
+    var p2pSignal; //Signal data for peer to peer connection
+    var isP2PInitiator = false;
+
     var peer = new Peer({
 
         initiator: location.hash === '#init',
@@ -17,10 +20,10 @@ $(document).ready(() => {
 
     peer.on('signal', data => {
         // document.getElementById('myID').value = JSON.stringify(data)
-        console.log(`The Simple Peer Data is ${JSON.stringify(data)}.`);
-        saveToDB(data)
-    })
-
+        // console.log(`The Simple Peer Data is ${JSON.stringify(data)}.`);
+        p2pSignal = data;
+        isP2PInitiator = true;
+    });
 
 
     //establish connection to server with a socket
@@ -43,9 +46,18 @@ $(document).ready(() => {
 
     socket.on('checkUserCount', (userCount) => {
         console.log(`Total users ${userCount}.`);
-        if(userCount === 1){
+        if (userCount === 1 && window.location.href === window.location.href + '') {
             window.location.href = window.location.href + '/#init';
         }
+        //When server has 2 people emit the connection signal and broadcast on server side
+        else if (userCount === 2 && isP2PInitiator) {
+            console.log(`${userCount} users connected. Sending p2p signal ${JSON.stringify(p2pSignal)}`);
+            socket.emit('p2pSignal', p2pSignal);
+        }
+    });
+
+    socket.on('p2pStartSignal', (startSignal) => {
+        console.log(`Broadcasted signal data ${startSignal}`);
     });
 
     socket.on('userDisconnect', (currentUsers) => {
