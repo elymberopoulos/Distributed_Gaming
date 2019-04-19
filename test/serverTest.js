@@ -4,8 +4,9 @@ var io = require('socket.io-client');
 var socketURL = 'http://127.0.0.1:8080'
 
 var options = {
-    transports: ['websocket'],
-    'force new connection': true
+    'reconnection delay' : 0,
+    'reopen delay' : 0,
+    'force new connection' : true
 };
 describe('Suite of unit tests', function() {
 
@@ -13,15 +14,13 @@ describe('Suite of unit tests', function() {
 
     beforeEach(function(done) {
         // Setup
-        socket = io.connect(socketURL, {
-            'reconnection delay' : 0
-            , 'reopen delay' : 0
-            , 'force new connection' : true
-        });
+        socket = io.connect(socketURL,options);
+
         socket.on('connect', function() {
             socket.emit('incrementCount', (1));
             done();
         });
+
         socket.on('userDisconnect', function() {
             console.log('disconnected...');
         });
@@ -33,7 +32,6 @@ describe('Suite of unit tests', function() {
             console.log('disconnecting...');
             socket.disconnect();
         } else {
-            // There will not be a connection unless you have done() in beforeEach, socket.on('connect'...)
             console.log('no connection to break...');
         }
         done();
@@ -46,29 +44,69 @@ describe('Suite of unit tests', function() {
         });
     });
 
-    var socket2 = io.connect(socketURL, {
-        'reconnection delay' : 0
-        , 'reopen delay' : 0
-        , 'force new connection' : true
+    it('Server should emit frames from the emulator to the user', function(done){
+        socket.on('frame', function(screen) {
+            assert.equal((screen != null),true);
+            done();
+        });
     });
 
-    socket2.on('connect', function(){
-        socket.emit('incrementCount', (1));
-        console.log('worked...');
+    it('User should be able to send keydown and keyup commands to server', function(done){
+        socket.emit('keydown',{key:37});
+        socket.emit('keyup',{key:37});
+
+        socket.on('acceptedKey', function(data){
+            assert.equal(data,true);
+            done();
+        });
+
     });
-    
+});
+
+describe('disconnect test', function() {
+
+    beforeEach(function(done) {
+        // Setup
+        socket2 = io.connect(socketURL,options);
+
+        socket2.on('connect', function() {
+            socket2.emit('incrementCount', (1));
+        });
+
+        socket = io.connect(socketURL, options);
+
+        socket.on('connect', function() {
+            socket.emit('incrementCount', (1));
+            done();
+        });
+
+        socket.on('userDisconnect', function() {
+            console.log('disconnected...');
+        });
+    });
+
+    afterEach(function(done) {
+        // Cleanup
+        if(socket.connected) {
+            console.log('disconnecting...');
+            socket.disconnect();
+        } else {
+            console.log('no connection to break...');
+        }
+        done();
+    });
+
     it('Server should lower count when a user disconnects', function(done){
         socket2.disconnect();
         
         socket.on('userDisconnect', function(userCount){
-            if (userCount != 0){
-                assert.equal(userCount,1);
-                socket.emit('shutDown');
-                done();
-            }
+            assert.equal(userCount,1);
+            socket.emit('shutDown');
+            done();
         });
     });
 });
+
 
 
     // it('userDisconnected test', function (done) {
