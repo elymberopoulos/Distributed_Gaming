@@ -22,17 +22,17 @@ describe('Suite of unit tests', function() {
         });
 
         socket.on('userDisconnect', function() {
-            console.log('disconnected...');
+            console.log('disconnected);
         });
     });
 
     afterEach(function(done) {
         // Cleanup
         if(socket.connected) {
-            console.log('disconnecting...');
+            console.log('disconnecting');
             socket.disconnect();
         } else {
-            console.log('no connection to break...');
+            console.log('no connection to break');
         }
         done();
     });
@@ -81,17 +81,17 @@ describe('disconnect test', function() {
         });
 
         socket.on('userDisconnect', function() {
-            console.log('disconnected...');
+            console.log('disconnected');
         });
     });
 
     afterEach(function(done) {
         // Cleanup
         if(socket.connected) {
-            console.log('disconnecting...');
+            console.log('disconnecting');
             socket.disconnect();
         } else {
-            console.log('no connection to break...');
+            console.log('no connection to break');
         }
         done();
     });
