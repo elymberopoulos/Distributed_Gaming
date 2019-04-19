@@ -18,6 +18,7 @@ server.listen(port, () => {
     console.log(`Server running on port ${port}.`);
 });
 
+
 //Generate random hash for peer-to-peer connection unique id's
 var randomHash = randHash.generateHash({
     length: 5
@@ -27,14 +28,14 @@ var io = socketIO(server);
 var currentScreen;
 var currentUsers = 0;
 
-function adjustUserCount(value){
-    if(value === "decrement" && currentUsers > 0){
+function adjustUserCount(value) {
+    if (value === "decrement" && currentUsers > 0) {
         return currentUsers -= 1;
     }
-    else if(value === "increment"){
+    else if (value === "increment") {
         currentUsers += 1;
     }
-    else{
+    else {
         console.log("UserCount error.");
     }
 }
@@ -54,11 +55,15 @@ var keysToPress = []; //What keys we want pressed.
 io.on('connection', function (socket) {
     console.log('connection happened');
 
-    socket.on('incrementCount', (data)=>{
+    socket.on('incrementCount', (data) => {
         adjustUserCount('increment');
         io.emit('checkUserCount', currentUsers);
     });
 
+    socket.on('p2pSignal', (p2pSignal) => {
+        console.log(`Server p2p signal is ${JSON.stringify(p2pSignal)}`);
+        socket.broadcast.emit('p2pStartSignal', JSON.stringify(p2pSignal));
+    });
 
     //The new connection can send commands.
     socket.on('keydown', function (data) {

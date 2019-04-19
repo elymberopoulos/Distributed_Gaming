@@ -26,5 +26,12 @@ before_script:
 script:
   - npm run test
 
+deploy:
+  provider: heroku
+  api_key: 70b830ec-8aa6-4b47-b522-900909730350
+  on:
+    branch: master
+
+
 
 

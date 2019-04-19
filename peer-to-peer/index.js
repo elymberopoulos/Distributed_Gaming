@@ -5,9 +5,9 @@ var peer = new Peer({
 
 	initiator: location.hash === '#init',
 	//notifies neighboring peer who is the initiator
-	trickle:false
+	trickle: false
 	//don't use Turn/Stun servers
-	
+
 })
 
 peer.on('signal', data => {
@@ -16,7 +16,7 @@ peer.on('signal', data => {
 
 })
 
-document.getElementById('connect').addEventListener('click',()=>{
+document.getElementById('connect').addEventListener('click', () => {
 
 
 	var otherID = JSON.parse(document.getElementById('otherId').value)
@@ -25,12 +25,12 @@ document.getElementById('connect').addEventListener('click',()=>{
 
 })
 
-document.getElementById('send').addEventListener('click',() => {
+document.getElementById('send').addEventListener('click', () => {
 	var yourMessage = document.getElementById('yourMessage').value
 	peer.send(yourMessage)
 })
 
-peer.on('data',data => {
+peer.on('data', data => {
 
 	var yourMessage = document.getElementById('yourMessage').value
 	peer.send(yourMessage)
@@ -39,7 +39,7 @@ peer.on('data',data => {
 
 peer.on('data', data => {
 
-	document.getElementById('messages').textContent += data = '\n' 
+	document.getElementById('messages').textContent += data = '\n'
 })
 
 
