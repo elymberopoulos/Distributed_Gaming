@@ -22,7 +22,7 @@ describe('Suite of unit tests', function() {
         });
 
         socket.on('userDisconnect', function() {
-            console.log('disconnected);
+            console.log('disconnected');
         });
     });
 

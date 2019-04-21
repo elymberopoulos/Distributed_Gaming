@@ -22,21 +22,17 @@ server.listen(port, () => {
 });
 
 
-//Generate random hash for peer-to-peer connection unique id's
-var randomHash = randHash.generateHash({
-    length: 5
-});
-
 var io = socketIO(server);
 var currentScreen;
 var currentUsers = 0;
 
+//Function for adjusting the user count so it cannot go below 0 in any way
 function adjustUserCount(value) {
     if (value === "decrement" && currentUsers > 0) {
         return currentUsers -= 1;
     }
     else if (value === "increment") {
-        currentUsers += 1;
+        return currentUsers += 1;
     }
     else {
         console.log("UserCount error.");
@@ -61,13 +57,17 @@ io.on('connection', function (socket) {
     console.log('connection happened');
 
     socket.on('incrementCount', (data) => {
-        adjustUserCount('increment');
-        io.emit('checkUserCount', currentUsers);
+        io.emit('checkUserCount', adjustUserCount('increment'));
     });
-
+    //Relay the first peer's connection information to all other peers with broadcast
     socket.on('p2pSignal', (p2pSignal) => {
-        console.log(`Server p2p signal is ${JSON.stringify(p2pSignal)}`);
-        socket.broadcast.emit('p2pStartSignal', JSON.stringify(p2pSignal));
+        console.log(`Server p2p signal is ${p2pSignal}`);
+        socket.broadcast.emit('p2pStartSignal', p2pSignal);
+    });
+    //Relay the second peer's connection information to other peers with broadcast
+    socket.on('2ndSignal', (secondSignal)=>{
+        console.log(`Server second signal is ${secondSignal}`);
+        socket.broadcast.emit('2ndSignal', secondSignal);
     });
 
     //The new connection can send commands.
@@ -122,6 +122,7 @@ var emulatorLoop = function () {
 
     frames++;
     if (frames % 20 === 0) { //Output every 20th frame.
+        console.log(frames);
         if (io) {
 
             io.emit('frame', currentScreen);
@@ -134,7 +135,7 @@ var emulatorLoop = function () {
 
     var elapsed = process.hrtime(start)[1] / 1000000;
     setTimeout(emulatorLoop, 5); //Try and run at about 60fps.
-    
+
     //this runs the timer and if no  users are connected to the server then it starts the timer
     if (currentUsers < 1) {
         if (!timerOn) {
@@ -157,8 +158,8 @@ function startTimer() {
 //timer is the main code for the timer and will shutdown the server if it has been inactive for 3 min unless changed at the top by changing serverTimeout
 function timer() {
     if (timerOn) {
-        var time = (((Date.now() - startTime)/1000)/60);//mili to seconds to min
-        if ((time - previousTime)>1) {
+        var time = (((Date.now() - startTime) / 1000) / 60);//mili to seconds to min
+        if ((time - previousTime) > 1) {
             console.log('Inactive time is: ' + time.toPrecision(1) + 'min');
             previousTime = time;
         }
