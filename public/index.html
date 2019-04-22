@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
+	<head>
+    	<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- <meta name="viewport" content="width=500, initial-scale=1"> -->
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+    	<title>Distributed Tetris</title>
+	</head>
 
-<body>
-  <section id= "contentSection">
-        <div>DS-GAMING</div>
-        <canvas id="mainCanvas"></canvas>
-    </section>
-    <script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>
-</body>
+	<body>
+  		<section id="contentSection">
+        	<main>DS-GAMING</main>
+			<!--<canvas id="mainCanvas" width="500" height="500"  style="border:1px solid #000000;">-->
+				<canvas id="mainCanvas"></canvas></canvas>
+		</section>
+		<section id="statsSection">
+			<p id="stats">
+				stats go here
+			</p>
+		</section>
+	</body>
+		<script src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>
+	</body>
 
 </html>

@@ -6,11 +6,16 @@ $(document).ready(() => {
     //establish connection to server with a socket
     var socket = io();
 
+    //var screen = gameboy.getScreen();
     var canvas = document.getElementById('mainCanvas');
-    canvas.setAttribute('width', 550);
-    canvas.setAttribute('height', 550);
+    //var canvas = document.querySelector('canvas');
+    //canvas.setAttribute('width', 160);
+    //canvas.setAttribute('height', 144);
     var ctx = canvas.getContext('2d');
     var ctx_data = ctx.createImageData(160, 144);
+
+    // adding stats to webpage
+    var stats = document.getElementById('stats')
 
     console.log('about to connect');
     //var socket = io.connect('localhost:3333'); //Server address goes here.
@@ -19,24 +24,35 @@ $(document).ready(() => {
     socket.on('connect', () => {
         console.log("Connected to server.");
         socket.emit('incrementCount', (1));
+        stats.innerHTML = `A user connected ${currentUsers} remaining`;
     }); 
 
     socket.on('checkUserCount', (userCount) => {
         console.log(`Total users ${userCount}.`);
+        stats.innerHTML = `Total users ${userCount}.`;
     });
 
     socket.on('userDisconnect', (currentUsers) => {
         console.log(`A user disconnected ${currentUsers} remaining`);
+        stats.innerHTML = `A user disconnected ${currentUsers} remaining`;
     });
 
     //Credit to Dan Shumway for his serverboy code example
     socket.on('frame', function (data) {
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             ctx_data.data[i] = data[i];
         }
 
         ctx.putImageData(ctx_data, 0, 0);
     });
+
+    // socket.on('screen', function (data) {
+    //     for (let i = 0; i < screen.length; i++) {
+    //         ctx_data.data[i] = screen[i];
+    //     }
+
+    //     ctx.putImageData(ctx_data, 0, 0);
+    // });
 
     var audioContext = new AudioContext();
     var frames = {};
@@ -99,6 +115,7 @@ $(document).ready(() => {
             socket.emit('keyup', { key: keys[e.keyCode] });
         }
     }
+    
 });
 
 
