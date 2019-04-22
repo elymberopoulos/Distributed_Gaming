@@ -24,7 +24,6 @@ $(document).ready(() => {
     socket.on('connect', () => {
         console.log("Connected to server.");
         socket.emit('incrementCount', (1));
-        stats.innerHTML = `A user connected ${currentUsers} remaining`;
     }); 
 
     socket.on('checkUserCount', (userCount) => {
