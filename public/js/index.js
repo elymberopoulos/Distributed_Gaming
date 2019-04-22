@@ -15,7 +15,8 @@ $(document).ready(() => {
     var ctx_data = ctx.createImageData(160, 144);
 
     // adding stats to webpage
-    var stats = document.getElementById('stats')
+    var connectionStats = document.getElementById('stats')
+    var userStats = document.getElementById('totalUsers')
 
     console.log('about to connect');
     //var socket = io.connect('localhost:3333'); //Server address goes here.
@@ -24,17 +25,26 @@ $(document).ready(() => {
     socket.on('connect', () => {
         console.log("Connected to server.");
         socket.emit('incrementCount', (1));
-    }); 
+    });
 
     socket.on('checkUserCount', (userCount) => {
         console.log(`Total users ${userCount}.`);
-        stats.innerHTML = `Total users ${userCount}.`;
+//	ambigious way of showing total users on homepage
+//        totalUsers.innerHTML = `Total users ${userCount}.`;
     });
 
     socket.on('userDisconnect', (currentUsers) => {
         console.log(`A user disconnected ${currentUsers} remaining`);
-        stats.innerHTML = `A user disconnected ${currentUsers} remaining`;
+        if(currentUsers == null){
+			connectionStats.innerHTML = `You are playing alone :(`;
+		}else{
+			connectionStats.innerHTML = `A user disconnected, ${currentUsers} users remaining`;}
     });
+
+ //   socket.on('connection', () => {
+ //       console.log(`A user connected ${currentUsers} remaining`);
+ //       connectionStats.innerHTML = `A user connected, ${currentUsers} users remaining`;
+ //   });
 
     //Credit to Dan Shumway for his serverboy code example
     socket.on('frame', function (data) {
@@ -114,7 +124,7 @@ $(document).ready(() => {
             socket.emit('keyup', { key: keys[e.keyCode] });
         }
     }
-    
+
 });
 
 
