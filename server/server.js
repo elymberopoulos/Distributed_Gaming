@@ -25,14 +25,19 @@ var randomHash = randHash.generateHash({
 
 var io = socketIO(server);
 var currentScreen;
-var currentUsers = 0;
+let currentUsers = 0;
 
 function adjustUserCount(value){
     if(value === "decrement" && currentUsers > 0){
         return currentUsers -= 1;
+        // did this fix the obnoxious "null remaining" ?
+        //return currentUsers-- ;
     }
     else if(value === "increment"){
         currentUsers += 1;
+        
+        // did this fix the obnoxious userCount ?
+        //return currentUsers++ ;
     }
     else{
         console.log("UserCount error.");
@@ -50,9 +55,20 @@ gameboy_instance.loadRom(rom);
 // var io; //Handle streaming.
 var keysToPress = []; //What keys we want pressed.
 
+// arrays to hold users and their connections/sockets
+//var users=[];
+var connections=[];
+
+// app.get('/', function(req, res){
+// 	//res.sendFile(__dirname + '/../public/index.html');
+// 	res.sendFile(publicDir);
+// });
+
 
 io.on('connection', function (socket) {
-    console.log('connection happened');
+    connections.push(socket);
+    //console.log('connection happened');
+    console.log('Connected: %s sockets connected', connections.length);
 
     socket.on('incrementCount', (data)=>{
         adjustUserCount('increment');
@@ -75,9 +91,17 @@ io.on('connection', function (socket) {
         }
     });
 
+    //Now, the new connection can also send messages.
+    socket.on('send message', function(data){
+		console.log(data);
+		io.sockets.emit('new message', {msg: data});
+    });
+    
     //When a user disconnects then the total user counter is decremented and every socket is notified
     socket.on('disconnect', () => {
-        console.log('user disconnected');
+        connections.splice(connections.indexOf(socket), 1);
+        // console.log('user disconnected');
+		console.log('Disconnected: %s sockets connected', connections.length);
         io.emit('userDisconnect', adjustUserCount('decrement'));
     });
 

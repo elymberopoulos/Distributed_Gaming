@@ -41,11 +41,6 @@ $(document).ready(() => {
 			connectionStats.innerHTML = `A user disconnected, ${currentUsers} users remaining`;}
     });
 
- //   socket.on('connection', () => {
- //       console.log(`A user connected ${currentUsers} remaining`);
- //       connectionStats.innerHTML = `A user connected, ${currentUsers} users remaining`;
- //   });
-
     //Credit to Dan Shumway for his serverboy code example
     socket.on('frame', function (data) {
         for (let i = 0; i < data.length; i++) {
@@ -127,7 +122,9 @@ $(document).ready(() => {
 
 });
 
-
+$(function(){
+    var socket = io.connect();
+});
 
 
 
