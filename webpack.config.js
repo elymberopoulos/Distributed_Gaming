@@ -1,5 +1,6 @@
 const fs = require('fs');
 module.exports = {
+    target: 'web',
     entry: './public/js/index.js',
     output: {
         path: __dirname + "/public/js/webpack_output",

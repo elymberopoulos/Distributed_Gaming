@@ -6,7 +6,7 @@ const socketIO = require('socket.io');
 const port = process.env.PORT || 8080;//This port will guarantee that when deployed an available port will be found
 const publicDir = path.join(__dirname, '../public');//set public directory path for express to serve up the files
 const gameboy = require('serverboy');
-const randHash = require('random-hash');
+const P2PServer = require('./PeerEmulator');
 
 //Change serverTimeOut to change timeout time
 const serverTimeout = 3;
@@ -16,15 +16,15 @@ var app = express();
 var server = http.createServer(app);
 app.use(express.static(publicDir));//Express will use static middleware
 
+var io = socketIO(server);
+var currentScreen;
+var currentUsers = 0;
+
 //Have server listen on specified port
 server.listen(port, () => {
     console.log(`Server running on port ${port}.`);
 });
 
-
-var io = socketIO(server);
-var currentScreen;
-var currentUsers = 0;
 
 //Function for adjusting the user count so it cannot go below 0 in any way
 function adjustUserCount(value) {
@@ -65,9 +65,14 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('p2pStartSignal', p2pSignal);
     });
     //Relay the second peer's connection information to other peers with broadcast
-    socket.on('2ndSignal', (secondSignal)=>{
+    socket.on('2ndSignal', (secondSignal) => {
         console.log(`Server second signal is ${secondSignal}`);
         socket.broadcast.emit('2ndSignal', secondSignal);
+    });
+    socket.on('StartP2PServer', ()=>{
+        // P2PServer.SetPort();
+        P2PServer.InitiateBackUpServer('start');
+        io.emit('StartP2PServer');
     });
 
     //The new connection can send commands.
@@ -174,3 +179,4 @@ function timer() {
 }
 
 emulatorLoop();
+
