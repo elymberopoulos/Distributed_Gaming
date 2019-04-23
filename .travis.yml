@@ -24,7 +24,7 @@ before_script:
 # - git lfs pull
 
 script:
-  - npm run test
+  - npm run combinedtest
 
 
 
