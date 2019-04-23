@@ -1,7 +1,7 @@
 const fs = require('fs');
 module.exports = {
     target: 'web',
-    entry: './public/js/index.js',
+    entry: ['babel-polyfill', './public/js/index.js'],
     output: {
         path: __dirname + "/public/js/webpack_output",
         filename: 'webpackOutput.js'

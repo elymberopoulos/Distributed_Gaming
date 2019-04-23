@@ -40,7 +40,7 @@ function adjustUserCount(value) {
 }
 
 //Credit to Dan Shumway for his serverboy code example
-var rompath = __dirname + '/emulator/rom/Tetris.gb';
+var rompath = __dirname + '/emulator/rom/TetrisDX.gbc';
 var rom = fs.readFileSync(rompath);
 
 //start the rom.
@@ -64,6 +64,7 @@ io.on('connection', function (socket) {
         console.log(`Server p2p signal is ${p2pSignal}`);
         socket.broadcast.emit('p2pStartSignal', p2pSignal);
     });
+
     //Relay the second peer's connection information to other peers with broadcast
     socket.on('2ndSignal', (secondSignal) => {
         console.log(`Server second signal is ${secondSignal}`);
