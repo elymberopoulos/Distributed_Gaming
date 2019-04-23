@@ -31,7 +31,7 @@ function init() {
     let peer; //peer object initialized later based on href location to either generate initiator or generic peer
     let p2pSignal; //Signal data for peer to peer connection
     let isP2PInitiator = false; //Boolean check for the first peer created. emits special hash code signals
-    let localEmulatorStarted = false; //triggered in peer.on('connect') to see if server communication is severed
+    var localEmulatorStarted = false; //triggered in peer.on('connect') to see if server communication is severed
     //--------------------------------------------------
 
     //Constructor for a new peer object. This object will generate connection codes
@@ -64,15 +64,12 @@ function init() {
 
             //If the connection to the server is lost then the backup server port needs to be returned
             //to each client so that when the signal is lost their window location can be redirected to that localhost.
-            // if (!localEmulatorStarted) {
-            //     // socket.emit('StartP2PServer');
-            //     localEmulatorStarted = true;
-            // }
-            // if (socket.disconnected && localEmulatorStarted) {
-            //     console.log('Backup emulator started');
-            //     BackUpEmulator.StartBackup();
-            //     console.log(`SERVER STOPPED.`);
-            // }
+            if (socket.disconnected && !localEmulatorStarted) {
+                console.log('Backup emulator started');
+                BackUpEmulator.StartBackup();
+                console.log(`SERVER STOPPED.`);
+                localEmulatorStarted = true; //set back to false to avoid being repeatedly called.
+            }
         }, 2000);
     });
 
@@ -122,7 +119,7 @@ function init() {
             //emit the second generated p2p signal back to the original peer to establish the connection.
             socket.emit('2ndSignal', secondSignal);
             console.log(`Second Signal sent ${secondSignal}`);
-        }, 100);
+        }, 150);
     });
 
     //When the second signal is sent back to the original peer establish the connection between the two
