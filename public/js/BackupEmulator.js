@@ -25,6 +25,7 @@ function StartBackup() {
     lcd: { 
         canvas: canvas }
   });
+  
   // gameboy.replaceCartridge(rom);
   //   const fullscreen = new Fullscreen($screen);
 //   const pointerLock = new PointerLock($screen);
