@@ -11,6 +11,9 @@ const P2PServer = require('./PeerEmulator');
 //Change serverTimeOut to change timeout time
 const serverTimeout = 3;
 
+//Change serverTimeOut to change timeout time
+const serverTimeout = 3;
+
 //Create server object and pass it to socketIO so sockets run on server
 var app = express();
 var server = http.createServer(app);
@@ -25,7 +28,6 @@ server.listen(port, () => {
     console.log(`Server running on port ${port}.`);
 });
 
-
 //Function for adjusting the user count so it cannot go below 0 in any way
 function adjustUserCount(value) {
     if (value === "decrement" && currentUsers > 0) {
@@ -33,6 +35,7 @@ function adjustUserCount(value) {
     }
     else if (value === "increment") {
         return currentUsers += 1;
+
     }
     else {
         console.log("UserCount error.");
@@ -129,6 +132,7 @@ var emulatorLoop = function () {
     frames++;
     if (frames % 20 === 0) { //Output every 20th frame.
         console.log(frames);
+
         if (io) {
 
             io.emit('frame', currentScreen);
@@ -166,6 +170,7 @@ function timer() {
     if (timerOn) {
         var time = (((Date.now() - startTime) / 1000) / 60);//mili to seconds to min
         if ((time - previousTime) > 1) {
+
             console.log('Inactive time is: ' + time.toPrecision(1) + 'min');
             previousTime = time;
         }
@@ -178,6 +183,5 @@ function timer() {
         }
     }
 }
-
 emulatorLoop();
 
