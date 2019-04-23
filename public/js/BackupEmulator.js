@@ -17,15 +17,16 @@ const Gameboy = require('jsgbc');
 // }
 function StartBackup() {
   var reader = new FileReader();
-  var rom = reader.readAsArrayBuffer('./localEmulator/TetrisDX.gbc');
+  // var rom = reader.readAsArrayBuffer('./localEmulator/TetrisDX.gbc');
   let canvas = document.getElementById('mainCanvas');
-  const jsGBCui = $jsGBCui.get(0);
+  // const jsGBCui = $jsGBCui.get(0);
   // const $screen = $(jsGBCui.screenElement);
-  const gameboy = new Gameboy({
+  const gameboy = new Gameboy.GameBoy({
     lcd: { 
         canvas: canvas }
   });
-  gameboy.replaceCartridge(rom);
+  
+  // gameboy.replaceCartridge(rom);
   //   const fullscreen = new Fullscreen($screen);
 //   const pointerLock = new PointerLock($screen);
 
