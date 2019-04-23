@@ -8,7 +8,8 @@
     "heroku-postbuild": "webpack -p --config ./webpack.config.js --progress",
     "dev": "nodemon ./server/server.js",
     "compile": "webpack ./public/js/index.js --watch",
-    "test": "nyc mocha --recursive || true"
+    "test": "nyc mocha --recursive --exit || true",
+    "combinedtest": "concurrently \"node ./server/server.js\" \"nyc mocha --recursive --exit || true\""
   },
   "engines": {
     "node": "10.14.2"
@@ -19,13 +20,16 @@
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
     "babel-loader": "^8.0.5",
-    "canvas": "^2.4.1",
+    "babel-polyfill": "^6.26.0",
+    "concurrently": "^4.1.0",
     "css-loader": "^2.1.1",
     "express": "^4.16.4",
-    "jquery": "^3.3.1",
-    "jsnes": "^1.1.0",
+    "get-port": "^5.0.0",
+    "jquery": "^3.4.0",
+    "jsgbc": "^0.5.8",
     "random-hash": "^4.0.1",
     "serverboy": "0.0.4",
+    "simple-peer": "^9.3.0",
     "socket.io": "^2.2.0",
     "socket.io-client": "^2.2.0",
     "style-loader": "^0.23.1",
@@ -34,8 +38,8 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "mocha": "^6.0.2",
-    "nodemon": "^1.18.10",
+    "mocha": "^6.1.3",
+    "nodemon": "^1.18.11",
     "nyc": "^13.3.0"
   }
 }
