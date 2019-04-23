@@ -6,7 +6,10 @@ const socketIO = require('socket.io');
 const port = process.env.PORT || 8080;//This port will guarantee that when deployed an available port will be found
 const publicDir = path.join(__dirname, '../public');//set public directory path for express to serve up the files
 const gameboy = require('serverboy');
-const randHash = require('random-hash');
+const P2PServer = require('./PeerEmulator');
+
+//Change serverTimeOut to change timeout time
+const serverTimeout = 3;
 
 //Change serverTimeOut to change timeout time
 const serverTimeout = 3;
@@ -16,26 +19,23 @@ var app = express();
 var server = http.createServer(app);
 app.use(express.static(publicDir));//Express will use static middleware
 
+var io = socketIO(server);
+var currentScreen;
+var currentUsers = 0;
+
 //Have server listen on specified port
 server.listen(port, () => {
     console.log(`Server running on port ${port}.`);
 });
 
-//Generate random hash for peer-to-peer connection unique id's
-var randomHash = randHash.generateHash({
-    length: 5
-});
-
-var io = socketIO(server);
-var currentScreen;
-var currentUsers = 0;
-
+//Function for adjusting the user count so it cannot go below 0 in any way
 function adjustUserCount(value) {
-    if (value === 'decrement' && currentUsers > 0) {
+    if (value === "decrement" && currentUsers > 0) {
         return currentUsers -= 1;
     }
-    else if (value === 'increment') {
-        currentUsers += 1;
+    else if (value === "increment") {
+        return currentUsers += 1;
+
     }
     else {
         console.log("UserCount error.");
@@ -43,7 +43,7 @@ function adjustUserCount(value) {
 }
 
 //Credit to Dan Shumway for his serverboy code example
-var rompath = __dirname + '/emulator/rom/Tetris.gb';
+var rompath = __dirname + '/emulator/rom/TetrisDX.gbc';
 var rom = fs.readFileSync(rompath);
 
 //start the rom.
@@ -60,10 +60,24 @@ io.on('connection', function (socket) {
     console.log('connection happened');
 
     socket.on('incrementCount', (data) => {
-        adjustUserCount('increment');
-        io.emit('checkUserCount', currentUsers);
+        io.emit('checkUserCount', adjustUserCount('increment'));
+    });
+    //Relay the first peer's connection information to all other peers with broadcast
+    socket.on('p2pSignal', (p2pSignal) => {
+        console.log(`Server p2p signal is ${p2pSignal}`);
+        socket.broadcast.emit('p2pStartSignal', p2pSignal);
     });
 
+    //Relay the second peer's connection information to other peers with broadcast
+    socket.on('2ndSignal', (secondSignal) => {
+        console.log(`Server second signal is ${secondSignal}`);
+        socket.broadcast.emit('2ndSignal', secondSignal);
+    });
+    socket.on('StartP2PServer', ()=>{
+        // P2PServer.SetPort();
+        P2PServer.InitiateBackUpServer('start');
+        io.emit('StartP2PServer');
+    });
 
     //The new connection can send commands.
     socket.on('keydown', function (data) {
@@ -117,6 +131,8 @@ var emulatorLoop = function () {
 
     frames++;
     if (frames % 20 === 0) { //Output every 20th frame.
+        console.log(frames);
+
         if (io) {
 
             io.emit('frame', currentScreen);
@@ -129,7 +145,7 @@ var emulatorLoop = function () {
 
     var elapsed = process.hrtime(start)[1] / 1000000;
     setTimeout(emulatorLoop, 5); //Try and run at about 60fps.
-    
+
     //this runs the timer and if no  users are connected to the server then it starts the timer
     if (currentUsers < 1) {
         if (!timerOn) {
@@ -152,8 +168,9 @@ function startTimer() {
 //timer is the main code for the timer and will shutdown the server if it has been inactive for 3 min unless changed at the top by changing serverTimeout
 function timer() {
     if (timerOn) {
-        var time = (((Date.now() - startTime)/1000)/60);//mili to seconds to min
-        if ((time - previousTime)>1) {
+        var time = (((Date.now() - startTime) / 1000) / 60);//mili to seconds to min
+        if ((time - previousTime) > 1) {
+
             console.log('Inactive time is: ' + time.toPrecision(1) + 'min');
             previousTime = time;
         }
@@ -166,5 +183,5 @@ function timer() {
         }
     }
 }
-
 emulatorLoop();
+
