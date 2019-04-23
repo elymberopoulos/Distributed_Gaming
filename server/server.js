@@ -11,9 +11,6 @@ const P2PServer = require('./PeerEmulator');
 //Change serverTimeOut to change timeout time
 const serverTimeout = 3;
 
-//Change serverTimeOut to change timeout time
-const serverTimeout = 3;
-
 //Create server object and pass it to socketIO so sockets run on server
 var app = express();
 var server = http.createServer(app);
