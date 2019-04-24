@@ -8,6 +8,9 @@ function init() {
 
     //establish connection to server with a socket
     var socket = io();
+    
+
+
 
     //Set interval check for connection so errors to connect wont be
     //console logged repeatedly
@@ -86,6 +89,12 @@ function init() {
     socket.on('connect', () => {
         console.log("Connected to server.");
         socket.emit('incrementCount', (1));
+    });
+
+    //Send Message
+    socket.on('send message', function(data){
+        console.log(data);
+        io.sockets.emit('new message', {msg: data});
     });
 
     socket.on('checkUserCount', (userCount) => {
