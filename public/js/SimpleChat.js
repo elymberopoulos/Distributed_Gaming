@@ -5,6 +5,7 @@ function simpleChat(){
     var chatAppend = $('#chatAppend');
     var submitChatBTN = $('#submitChat').on('click', ()=>{
         console.log('button clicked');
+        
         chatAppend.append("<div>"+$("#chatMessage").val()+"</div>");
         $("#chatMessage").val("");
     });

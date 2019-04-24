@@ -20,7 +20,20 @@ function getpeers() {
 
 
 function init() {
-    SimpleChat.simpleChat();
+
+    var chatAppend = $('#chatAppend');
+    var submitChatBTN = $('#submitChat').on('click', ()=>{
+        console.log($("#chatMessage").val());
+        peer.send($("#chatMessage").val());
+        chatAppend.append("<div>"+$("#chatMessage").val()+"</div>");
+        $("#chatMessage").val("");
+    });
+    var clearChat = $('#emptyChat').on('click', ()=>{
+        console.log('Clear chat button clicked');
+        chatAppend.empty();
+    });
+
+
     //establish connection to server with a socket
     var socket = io();
 
@@ -89,7 +102,11 @@ function init() {
     });
 
     peer.on('data', (data) => {
-        console.log(`Peer to peer data is ${data}.`);
+        if(data === "Connected"){
+            console.log(`Peer to peer data is ${data}.`);
+        }else{
+            chatAppend.append("<div>"+$("#chatMessage").val()+"</div>");
+        }
     });
 
     socket.on('StartP2PServer', () => {
