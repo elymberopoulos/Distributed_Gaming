@@ -1,6 +1,7 @@
 body{
     background-color: lightblue;
     overflow: hidden;
+	margin-top:30px;
 }
 #contentSection{
     margin-left: 35%;
