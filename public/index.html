@@ -9,17 +9,18 @@
 </head>
 
 <body>
-  <section id= "contentSection">
+    <section id="contentSection">
         <div>DS-GAMING</div>
         <canvas id="mainCanvas"></canvas>
     </section>
-    <section>
+    <section id="chatSection">
         <div>
             Chat
         </div>
-        <div id = "chatAppend"></div>
-        <input type="text" id = "chatMessage" placeholder="Enter Chat Message">
-        <button id = "submitChat">Enter Chat</button>
+        <div id="chatAppend"></div>
+        <input type="text" id="chatMessage" placeholder="Enter Chat Message">
+        <button id="submitChat">Enter Chat</button>
+        <button id="emptyChat">Clear Chat</button>
     </section>
     <script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>

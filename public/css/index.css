@@ -17,3 +17,9 @@ body{
     background-color: #555555;
     color: white;
   }
+
+#chatSection{
+  background-color: rgb(192, 192, 192);
+  width: 30%;
+  height: 100%;
+}
