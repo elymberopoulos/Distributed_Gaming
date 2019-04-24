@@ -3,8 +3,8 @@ require('../css/index.css');
 const $ = require('jquery');
 const Peer = require("simple-peer");
 const BackUpEmulator = require('./BackupEmulator');
+const SimpleChat = require('./SimpleChat');
 let peers = []
-
 
 function setPeers(id) {
 
@@ -14,14 +14,13 @@ function setPeers(id) {
 }
 
 
-
 function getpeers() {
     return peers;
 }
 
 
 function init() {
-
+    SimpleChat.simpleChat();
     //establish connection to server with a socket
     var socket = io();
 
