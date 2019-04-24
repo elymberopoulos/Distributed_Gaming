@@ -56,8 +56,10 @@ function init() {
 
     //--------------------------------------------------
     //PEER TO PEER
+    let startingWebPage = window.location.href;
     let peer; //peer object initialized later based on href location to either generate initiator or generic peer
     let p2pSignal; //Signal data for peer to peer connection
+    let p2pSignal2;
     let isP2PInitiator = false; //Boolean check for the first peer created. emits special hash code signals
     var localEmulatorStarted = false; //triggered in peer.on('connect') to see if server communication is severed
     //--------------------------------------------------
@@ -86,7 +88,7 @@ function init() {
         console.log('Peer to peer connection established');
         //send interval messages to check that still connected with p2p
         setInterval(() => {
-            peer.send('Connected');
+            // peer.send('Connected');
             //This is where the backup localhost server would be started if the connection to the main server is lost.
             //When the peer to peer connection is triggered the backup server should start.
 
@@ -125,7 +127,7 @@ function init() {
 
         //The below if statements only apply to the first peer
         //Create the connection hash code necessary for peers to connect to the first peer.
-        if (userCount === 1 && window.location.href === window.location.href + '') {
+        if (userCount === 1 && window.location.href === startingWebPage) {
             isP2PInitiator = true;
             window.location.href = window.location.href + '/#init';
         }
@@ -140,7 +142,7 @@ function init() {
         //Apply the first peer's connection code to the second peer
         console.log(`Broadcasted signal data ${startSignal}`);
         startSignal = JSON.parse(startSignal);
-        setPeers(startSignal)
+        setPeers(startSignal);
         console.log(`ATTEMPTING PEER TO PEER CONNECTION WITH ${startSignal}`);
         peer.signal(startSignal);
 
@@ -159,7 +161,7 @@ function init() {
     socket.on('2ndSignal', (secondSignal) => {
         console.log(`Second signal is ${secondSignal}`);
         var signal = JSON.parse(secondSignal);
-        setPeers(signal)
+        setPeers(signal);
         peer.signal(signal);
     });
 
