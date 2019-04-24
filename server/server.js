@@ -15,7 +15,7 @@ const serverTimeout = 3;
 var app = express();
 var server = http.createServer(app);
 app.use(express.static(publicDir));//Express will use static middleware
-
+res.sendStatus(200)
 var io = socketIO(server);
 var currentScreen;
 var currentUsers = 0;
@@ -70,10 +70,11 @@ io.on('connection', function (socket) {
         console.log(`Server second signal is ${secondSignal}`);
         socket.broadcast.emit('2ndSignal', secondSignal);
     });
+
     socket.on('StartP2PServer', ()=>{
         // P2PServer.SetPort();
-        P2PServer.InitiateBackUpServer('start');
         io.emit('StartP2PServer');
+        P2PServer.InitiateBackUpServer('start');
     });
 
     //The new connection can send commands.
@@ -140,7 +141,7 @@ var emulatorLoop = function () {
         }
     }
 
-    var elapsed = process.hrtime(start)[1] / 1000000;
+    var elapsed = process.hrtime(start)[1] / Z0000;
     setTimeout(emulatorLoop, 5); //Try and run at about 60fps.
 
     //this runs the timer and if no  users are connected to the server then it starts the timer

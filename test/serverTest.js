@@ -1,5 +1,7 @@
 const assert = require('chai').assert;
 var io = require('socket.io-client');
+const Browser = require('zombie');
+
 
 var socketURL = 'http://127.0.0.1:8080'
 
@@ -51,7 +53,7 @@ describe('Suite of unit tests', function() {
         });
     });
 
-    it('User should be able to send keydown and keyup commands to server', function(done){
+    it('Server should be able to receive keydown and keyup commands', function(done){
         socket.emit('keydown',{key:37});
         socket.emit('keyup',{key:37});
 
@@ -59,7 +61,6 @@ describe('Suite of unit tests', function() {
             assert.equal(data,true);
             done();
         });
-
     });
 });
 
@@ -93,6 +94,8 @@ describe('disconnect test', function() {
         } else {
             console.log('no connection to break');
         }
+
+        if(socket2)
         done();
     });
 
@@ -101,11 +104,65 @@ describe('disconnect test', function() {
         
         socket.on('userDisconnect', function(userCount){
             assert.equal(userCount,1);
-            socket.emit('shutDown');
             done();
         });
     });
 });
+
+// describe("Client should be able to connect to server",function(){
+    
+//     const browser = new Browser();
+
+//     before(function(done) {
+//         browser.visit('//#init',done());
+//       });
+
+//     it('Client success', function(){
+//         browser.assert.success();
+//     })
+// });
+
+describe('p2pTest in relation to server job', function(){
+        // Setup
+    before(function(done){
+    socket2 = io.connect(socketURL,options);
+    socket = io.connect(socketURL, options);
+    done();
+    })
+    
+    after(function(done){
+        socket2.disconnect();
+        socket.disconnect();
+        done();
+    })
+
+    it('Server should emit to everyone p2pSignal when received', function(done){
+        socket.emit('p2pSignal', (1));
+
+        socket2.on('p2pStartSignal',function(p2pSignal){
+            assert.equal(p2pSignal,1);
+            done();
+        });
+    });
+
+
+
+    it('Server should emit to everyone 2ndSignal when received', function(done){
+        socket.emit('2ndSignal', (2));
+
+        socket2.on('2ndSignal',function(p2pSignal){
+            assert.equal(p2pSignal,2);
+            done();
+        });
+    });
+
+    it('Server should start p2p and emit StartP2PServer when told', function(done){
+        socket.emit('StartP2PServer');
+
+        done();
+    });
+})
+
 
 
 
