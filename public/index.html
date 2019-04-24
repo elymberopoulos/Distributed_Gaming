@@ -24,7 +24,7 @@
 				<div class="col-md-4">
 					<div class="well">
 						<h3>Online Users</h3>
-						<ul class="list-group id="users"></ul>
+						<ul class="list-group" id="users"></ul>
 					</div>
 				</div>
 				<div class="col-md-8">
@@ -45,7 +45,6 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>
 
-
 		<script>
 			$(function(){
 				var socket = io.connect();
@@ -56,8 +55,8 @@
 				$messageForm.submit(function(e){
 					e.preventDefault();
 					socket.emit('send message', $message.val());
+					console.log('pressed submit');
 					$message.val('');
-					console.log('Submitted');
 				});
 
 				socket.on('new message', function(data){

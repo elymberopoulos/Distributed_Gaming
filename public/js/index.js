@@ -8,9 +8,25 @@ function init() {
 
     //establish connection to server with a socket
     var socket = io();
-    
 
+	//declare index.html element variables
+/*	$(function(){
+		//var socket = io.connect();
+		var $messageForm = $('#messageForm');
+		var $message = $('#message');
+		var $chat = $('#chat');
 
+		$messageForm.submit(function(e){
+			e.preventDefault();
+			socket.emit('send message', $message.val());
+			$message.val('');
+			console.log('Submitted');
+		});
+
+		socket.on('new message', function(data){
+			$chat.append('<div class="well">'+data.msg+'</div>');
+			});
+	}); */
 
     //Set interval check for connection so errors to connect wont be
     //console logged repeatedly
@@ -94,7 +110,7 @@ function init() {
     //Send Message
     socket.on('send message', function(data){
         console.log(data);
-        io.sockets.emit('new message', {msg: data});
+        socket.emit('new message', {msg: data});
     });
 
     socket.on('checkUserCount', (userCount) => {
