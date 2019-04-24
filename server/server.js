@@ -15,7 +15,6 @@ const serverTimeout = 3;
 var app = express();
 var server = http.createServer(app);
 app.use(express.static(publicDir));//Express will use static middleware
-res.sendStatus(200)
 var io = socketIO(server);
 var currentScreen;
 var currentUsers = 0;
@@ -141,7 +140,7 @@ var emulatorLoop = function () {
         }
     }
 
-    var elapsed = process.hrtime(start)[1] / Z0000;
+    var elapsed = process.hrtime(start)[1] / 1000000;
     setTimeout(emulatorLoop, 5); //Try and run at about 60fps.
 
     //this runs the timer and if no  users are connected to the server then it starts the timer

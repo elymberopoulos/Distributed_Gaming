@@ -145,8 +145,6 @@ describe('p2pTest in relation to server job', function(){
         });
     });
 
-
-
     it('Server should emit to everyone 2ndSignal when received', function(done){
         socket.emit('2ndSignal', (2));
 
