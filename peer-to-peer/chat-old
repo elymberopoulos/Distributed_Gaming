@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+    	<meta charset="UTF-8">
+		<!--<meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    	<title>Distributed Tetris</title>
+	</head>
+
+	<body>
+  		<section id="contentSection">
+        	<main>DS-GAMING</main>
+			<!--<canvas id="mainCanvas" width="500" height="500"  style="border:1px solid #000000;">-->
+				<canvas id="mainCanvas"></canvas></canvas>
+		</section>
+		<p id="stats">
+			Stats loading ...
+		</p>
+		<p id="totalUsers">
+			Total users:
+		<p>
+		<!-- credits to Traversy Media on YouTube -->
+		<div class="container">
+			<div class="row">
+				<div class="col-md-4">
+					<div class="well">
+						<h3>Online Users</h3>
+						<ul class="list-group id="users"></ul>
+					</div>
+				</div>
+				<div class="col-md-8">
+					<div class="chat" id="chat">
+				    	<form id="messageForm">
+						<div class="form-group">
+							<label>Enter Message</label>
+							<textarea class="form-control" id="message"></textarea></textarea>
+							<br />
+							<input type="submit" class="btn btn-primary" value = "Send Message" />
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>
+	
+		<!-- chat and bootstrap scripts go below -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+		
+		<!-- <script type="text/javascript" src="js/chat.js"></script> -->
+		<script>
+			$(function(){
+				var socket = io.connect();
+				var $messageForm = $('#messageForm');
+				var $message = $('#message');
+				var $chat = $('#chat');
+
+				$messageForm.submit(function(e){
+					e.preventDefault();
+					socket.emit('send message', $message.val());
+					$message.val('');
+					//console.log('Submitted');
+				});
+
+				socket.on('new message', function(data){
+					$chat.append('<div class="well">'+data.msg+'</div>');
+				});
+			});
+		</script>
+	</body>
+
+</html>
+
+
+
+--------------
+
+// Chatting starts below
+//     //jquery & bootstrap part
+//     $(function(){
+//         var socket = io.connect();
+//         var $messageForm = $('#messageForm');
+//         var $message = $('#message');
+//         var $chat = $('#chat');
+//         $messageForm.submit(function(e){
+//             e.preventDefault();
+//             socket.emit('send message', $message.val());
+//             $message.val('');
+//             //console.log('Submitted');
+//             });
+//         socket.on('new message', function(data){
+//             $chat.append('<div class="well">'+data.msg+'</div>');
+//         });
+//     });
+//         // //socket (server) part
+//         // io.sockets.on('connection', function(socket){
+//         //     // connect
+//         //     connections.push(socket);
+//         //     console.log('Connected: %s sockets connected', connections.length);
+        
+//         //     // disconnect
+//         //     socket.on('disconnect', function(data){
+//         //         connections.splice(connections.indexOf(socket), 1);
+//         //         console.log('Disconnected: %s sockets connected', connections.length);
+//         //     });
+        
+//         //     //Send Message
+//         //     socket.on('send message', function(data){
+//         //         console.log(data);
+//         //         io.sockets.emit('new message', {msg: data});
+//         //     });
+//         // });
+    
+
+
