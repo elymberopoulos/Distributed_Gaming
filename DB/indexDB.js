@@ -1,15 +1,15 @@
-import {getpeers} from '../public/js/index'
+import { getpeers } from '../public/js/index'
 
 
 const dbName = "idTable";
 
 var request = indexedDB.open(dbName, 2);
 
-request.onerror = function(event) {
+request.onerror = function (event) {
   // Handle errors.
-    console.log("Error:",event)
+  console.log("Error:", event)
 };
-request.onupgradeneeded = function(event) {
+request.onupgradeneeded = function (event) {
   var db = event.target.result;
 
   // Create an objectStore to hold information about our peers. We're
@@ -23,38 +23,35 @@ request.onupgradeneeded = function(event) {
 
   // Use transaction oncomplete to make sure the objectStore creation is 
   // finished before adding data into it.
-  objectStore.transaction.oncomplete = function(event) {
+  objectStore.transaction.oncomplete = function (event) {
     // Store values in the newly created objectStore.
     var customerObjectStore = db.transaction("peers", "readwrite").objectStore("peers");
     var peerIDs = getpeers.getpeers()
-    if(peerIDs.length === 2)
-    {
-    peerIDs.forEach(peer => {
-      customerObjectStore.add(peer);
-    });
+    if (peerIDs.length === 2) {
+      peerIDs.forEach(peer => {
+        customerObjectStore.add(peer);
+      });
     }
   };
 };
 
 
-var getPeer = (peerID) =>
-{
-    db.transaction("peers").objectStore("peer").get(peerID).onsuccess = function(event) {
-        
-        console.log("Success",event.target.name)
-    };
+var getPeer = (peerID) => {
+  db.transaction("peers").objectStore("peer").get(peerID).onsuccess = function (event) {
+
+    console.log("Success", event.target.name)
+  };
 
 }
 
 console.log(getPeer(peerID));
 
-var distributePeers = () => 
-{
-    peerIDs.forEach(peerID => {
+var distributePeers = () => {
+  peerIDs.forEach(peerID => {
 
-        var curID = getPeer(peerID)
-        console.log("got:",curID)
+    var curID = getPeer(peerID)
+    console.log("got:", curID)
 
-    })
+  })
 }
 

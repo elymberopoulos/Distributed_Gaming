@@ -34,10 +34,10 @@ function PeerEmulator() {
     // server.listen(mainPort);
 
     (async () => {
-        await getPort().then((discoveredPort) => { 
+        await getPort().then((discoveredPort) => {
             server.listen(discoveredPort);
             console.log(`PEER TO PEER SERVER LISTENING ON DISCOVERED PORT: ${discoveredPort}.`);
-        }, (error)=>{
+        }, (error) => {
             console.log(`Error occurred while getting port ${error}!!`);
         });
         // Will use any element in the preferred ports array if available, otherwise fall back to a random port
