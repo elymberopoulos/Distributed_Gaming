@@ -8,17 +8,16 @@ const BackUpEmulator = require('./BackupEmulator');
 
 let peers = []
 
-function setPeers(id){
+function setPeers(id) {
 
     peers.push(id);
     console.log(peers[0])
-    
+
 }
 
 
 
-function getpeers()
-{
+function getpeers() {
     return peers;
 }
 

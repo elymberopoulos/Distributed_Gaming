@@ -70,7 +70,7 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('2ndSignal', secondSignal);
     });
 
-    socket.on('StartP2PServer', ()=>{
+    socket.on('StartP2PServer', () => {
         // P2PServer.SetPort();
         io.emit('StartP2PServer');
         P2PServer.InitiateBackUpServer('start');
