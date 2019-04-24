@@ -8,14 +8,17 @@ const BackUpEmulator = require('./BackupEmulator');
 
 let peers = []
 
-function setPeers(id) {
+function setPeers(id){
 
     peers.push(id);
-
+    console.log(peers[0])
+    
 }
 
 
-function getpeers() {
+
+function getpeers()
+{
     return peers;
 }
 
@@ -122,6 +125,7 @@ function init() {
         //Apply the first peer's connection code to the second peer
         console.log(`Broadcasted signal data ${startSignal}`);
         startSignal = JSON.parse(startSignal);
+        setPeers(startSignal)
         console.log(`ATTEMPTING PEER TO PEER CONNECTION WITH ${startSignal}`);
         peer.signal(startSignal);
 
@@ -140,6 +144,7 @@ function init() {
     socket.on('2ndSignal', (secondSignal) => {
         console.log(`Second signal is ${secondSignal}`);
         var signal = JSON.parse(secondSignal);
+        setPeers(signal)
         peer.signal(signal);
     });
 
@@ -200,8 +205,6 @@ function init() {
             keyUpSend(socket, e);
         }
     }
-
-
 }
 init();
 
