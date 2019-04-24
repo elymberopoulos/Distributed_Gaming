@@ -3,11 +3,28 @@ require('../css/index.css');
 const $ = require('jquery');
 const Peer = require("simple-peer");
 const BackUpEmulator = require('./BackupEmulator');
+let peers = []
 
-function init() {
+ 
+function setPeers(id){
 
-    //establish connection to server with a socket
-    var socket = io();
+    peers.push(id);
+    console.log(peers[0])
+    
+}
+
+
+
+function getpeers()
+{
+    return peers;
+}
+
+
+    function init() {
+
+        //establish connection to server with a socket
+        var socket = io();
 
     //Set interval check for connection so errors to connect wont be
     //console logged repeatedly
@@ -108,6 +125,7 @@ function init() {
         //Apply the first peer's connection code to the second peer
         console.log(`Broadcasted signal data ${startSignal}`);
         startSignal = JSON.parse(startSignal);
+        setPeers(startSignal)
         console.log(`ATTEMPTING PEER TO PEER CONNECTION WITH ${startSignal}`);
         peer.signal(startSignal);
 
@@ -126,6 +144,7 @@ function init() {
     socket.on('2ndSignal', (secondSignal) => {
         console.log(`Second signal is ${secondSignal}`);
         var signal = JSON.parse(secondSignal);
+        setPeers(signal)
         peer.signal(signal);
     });
 
@@ -140,75 +159,80 @@ function init() {
         for (var i = 0; i < data.length; i++) {
             ctx_data.data[i] = data[i];
         }
+      
+            ctx.putImageData(ctx_data, 0, 0);
+        });
+        var frames = {};
+        // var audioContext = new AudioContext();
+        // socket.on('audio', function (data) {
 
-        ctx.putImageData(ctx_data, 0, 0);
-    });
-    var frames = {};
-    // var audioContext = new AudioContext();
-    // socket.on('audio', function (data) {
+        //     //data needs to be copied to an array.
+        //     var buffers = {
+        //         left: [],
+        //         right: []
+        //     };
+        //     /* for (let i = 0; i < data.length; i+=2) {*/
+        //     /* buffers.left.push(data[i] || 0);*/
+        //     /* buffers.right.push(data[i+1] || 0);*/
+        //     /* }*/
 
-    //     //data needs to be copied to an array.
-    //     var buffers = {
-    //         left: [],
-    //         right: []
-    //     };
-    //     /* for (let i = 0; i < data.length; i+=2) {*/
-    //     /* buffers.left.push(data[i] || 0);*/
-    //     /* buffers.right.push(data[i+1] || 0);*/
-    //     /* }*/
+        //     var buffer = audioContext.createBuffer(1, data.length, 44150.56842105263);
+        //     buffer.getChannelData(0).set(data);
+        //     //buffer.getChannelData(1).set(buffers.right);
 
-    //     var buffer = audioContext.createBuffer(1, data.length, 44150.56842105263);
-    //     buffer.getChannelData(0).set(data);
-    //     //buffer.getChannelData(1).set(buffers.right);
+        //     var source = audioContext.createBufferSource();
+        //     source.buffer = buffer;
+        //     source.connect(audioContext.destination);
+        //     source.start();
+        // });
 
-    //     var source = audioContext.createBufferSource();
-    //     source.buffer = buffer;
-    //     source.connect(audioContext.destination);
-    //     source.start();
-    // });
+        window.onkeydown = function (e) {
+            var keys = {
+                "37": "left",
+                "39": "right",
+                "38": "up",
+                "40": "down",
+                "90": "a",
+                "88": "b",
+                "13": "start",
+                "32": "select"
+            };
 
-    window.onkeydown = function (e) {
-        var keys = {
-            "37": "left",
-            "39": "right",
-            "38": "up",
-            "40": "down",
-            "90": "a",
-            "88": "b",
-            "13": "start",
-            "32": "select"
-        };
-
-        if (keys[e.keyCode] != undefined) {
-            socket.emit('keydown', { key: keys[e.keyCode] });
-        } else {
-            if (e.keyCode === 27) {
-                socket.emit('restart', {});
+            if (keys[e.keyCode] != undefined) {
+                socket.emit('keydown', { key: keys[e.keyCode] });
+            } else {
+                if (e.keyCode === 27) {
+                    socket.emit('restart', {});
+                }
             }
         }
-    }
 
-    window.onkeyup = function (e) {
-        var keys = {
-            "37": "left",
-            "39": "right",
-            "38": "up",
-            "40": "down",
-            "90": "a",
-            "88": "b",
-            "13": "start",
-            "32": "select"
+        window.onkeyup = function (e) {
+            var keys = {
+                "37": "left",
+                "39": "right",
+                "38": "up",
+                "40": "down",
+                "90": "a",
+                "88": "b",
+                "13": "start",
+                "32": "select"
+            }
+            if (keys[e.keyCode]) {
+                socket.emit('keyup', { key: keys[e.keyCode] });
+            }
         }
-        if (keys[e.keyCode]) {
-            socket.emit('keyup', { key: keys[e.keyCode] });
-        }
-    }
 
-    var saveToDB = id => {
-
+        
     }
-}
-init();
+    init();
+
+    module.exports = {getpeers}
+    
+    
+
+   
+
 
 
 
