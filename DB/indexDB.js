@@ -1,4 +1,4 @@
-import {getpeers} from '../public/js/index'
+const getpeers = require('../public/js/index');
 
 
 const dbName = "idTable";
@@ -26,7 +26,8 @@ request.onupgradeneeded = function(event) {
   objectStore.transaction.oncomplete = function(event) {
     // Store values in the newly created objectStore.
     var customerObjectStore = db.transaction("peers", "readwrite").objectStore("peers");
-    var peerIDs = getpeers.getpeers()
+    var peerIDs = getpeers.getpeers();
+    console.log("got Peer:",peerIDs)
     if(peerIDs.length === 2)
     {
     peerIDs.forEach(peer => {

@@ -3,7 +3,27 @@ require('../css/index.css');
 const $ = require('jquery');
 const Peer = require("simple-peer");
 const BackUpEmulator = require('./BackupEmulator');
-let peers = []
+let peers = [];
+let count = 0;
+
+
+
+function setPeers(id){
+
+    peers.push(id);
+    console.log(peers[0])
+    count++; 
+    console.log(count)
+
+
+}
+
+
+
+function getpeers()
+{
+    return peers;
+}
 
  
     function init() {
@@ -114,8 +134,8 @@ let peers = []
             //Apply the first peer's connection code to the second peer
             console.log(`Broadcasted signal data ${startSignal}`);
             startSignal = JSON.parse(startSignal);
-            console.log(`ATTEMPTING PEER TO PEER CONNECTION WITH ${startSignal}`);
             setPeers(startSignal);
+            console.log(`ATTEMPTING PEER TO PEER CONNECTION WITH ${startSignal}`);
             peer.signal(startSignal);
 
             //set a timeout so that the p2pSignal variable has time to be initialized.
@@ -216,17 +236,8 @@ let peers = []
     }
     init();
 
-    setPeers = id => {
 
-        peers.push(id);
-
-    }
-
-   
-    export function getpeers()
-    {
-        return peers;
-    }
+    module.exports = {getpeers}
     
     
 
