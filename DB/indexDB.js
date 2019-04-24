@@ -1,3 +1,6 @@
+import {getpeers} from '../public/js/index'
+
+
 const dbName = "idTable";
 
 var request = indexedDB.open(dbName, 2);
@@ -23,7 +26,8 @@ request.onupgradeneeded = function(event) {
   objectStore.transaction.oncomplete = function(event) {
     // Store values in the newly created objectStore.
     var customerObjectStore = db.transaction("peers", "readwrite").objectStore("peers");
-    if(peerID.length === 2)
+    var peerIDs = getpeers.getpeers()
+    if(peerIDs.length === 2)
     {
     peerIDs.forEach(peer => {
       customerObjectStore.add(peer);
@@ -34,7 +38,6 @@ request.onupgradeneeded = function(event) {
 
 
 var getPeer = (peerID) =>
-
 {
     db.transaction("peers").objectStore("peer").get(peerID).onsuccess = function(event) {
         
@@ -42,6 +45,8 @@ var getPeer = (peerID) =>
     };
 
 }
+
+console.log(getPeer(peerID));
 
 var distributePeers = () => 
 {
@@ -52,4 +57,4 @@ var distributePeers = () =>
 
     })
 }
-    
+
