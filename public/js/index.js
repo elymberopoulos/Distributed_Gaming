@@ -3,28 +3,39 @@ require('../css/index.css');
 const $ = require('jquery');
 const Peer = require("simple-peer");
 const BackUpEmulator = require('./BackupEmulator');
+const SimpleChat = require('./SimpleChat');
 let peers = []
 
- 
-function setPeers(id){
+function setPeers(id) {
 
     peers.push(id);
     console.log(peers[0])
-    
+
 }
 
 
-
-function getpeers()
-{
+function getpeers() {
     return peers;
 }
 
 
-    function init() {
+function init() {
 
-        //establish connection to server with a socket
-        var socket = io();
+    var chatAppend = $('#chatAppend');
+    var submitChatBTN = $('#submitChat').on('click', ()=>{
+        console.log($("#chatMessage").val());
+        peer.send($("#chatMessage").val());
+        chatAppend.append("<div>"+$("#chatMessage").val()+"</div>");
+        $("#chatMessage").val("");
+    });
+    var clearChat = $('#emptyChat').on('click', ()=>{
+        console.log('Clear chat button clicked');
+        chatAppend.empty();
+    });
+
+
+    //establish connection to server with a socket
+    var socket = io();
 
     //Set interval check for connection so errors to connect wont be
     //console logged repeatedly
@@ -45,8 +56,10 @@ function getpeers()
 
     //--------------------------------------------------
     //PEER TO PEER
+    let startingWebPage = window.location.href;
     let peer; //peer object initialized later based on href location to either generate initiator or generic peer
     let p2pSignal; //Signal data for peer to peer connection
+    let p2pSignal2;
     let isP2PInitiator = false; //Boolean check for the first peer created. emits special hash code signals
     var localEmulatorStarted = false; //triggered in peer.on('connect') to see if server communication is severed
     //--------------------------------------------------
@@ -92,6 +105,11 @@ function getpeers()
 
     peer.on('data', (data) => {
         console.log(`Peer to peer data is ${data}.`);
+        if(data === "Connected"){
+            console.log(`Peer to peer data is ${data}.`);
+        }else{
+            chatAppend.append("<div>"+$("#chatMessage").val()+"</div>");
+        }
     });
 
     socket.on('StartP2PServer', () => {
@@ -110,7 +128,7 @@ function getpeers()
 
         //The below if statements only apply to the first peer
         //Create the connection hash code necessary for peers to connect to the first peer.
-        if (userCount === 1 && window.location.href === window.location.href + '') {
+        if (userCount === 1 && window.location.href === startingWebPage) {
             isP2PInitiator = true;
             window.location.href = window.location.href + '/#init';
         }
@@ -125,7 +143,7 @@ function getpeers()
         //Apply the first peer's connection code to the second peer
         console.log(`Broadcasted signal data ${startSignal}`);
         startSignal = JSON.parse(startSignal);
-        setPeers(startSignal)
+        setPeers(startSignal);
         console.log(`ATTEMPTING PEER TO PEER CONNECTION WITH ${startSignal}`);
         peer.signal(startSignal);
 
@@ -137,14 +155,14 @@ function getpeers()
             //emit the second generated p2p signal back to the original peer to establish the connection.
             socket.emit('2ndSignal', secondSignal);
             console.log(`Second Signal sent ${secondSignal}`);
-        }, 150);
+        }, 350);
     });
 
     //When the second signal is sent back to the original peer establish the connection between the two
     socket.on('2ndSignal', (secondSignal) => {
         console.log(`Second signal is ${secondSignal}`);
         var signal = JSON.parse(secondSignal);
-        setPeers(signal)
+        setPeers(signal);
         peer.signal(signal);
     });
 
@@ -159,79 +177,79 @@ function getpeers()
         for (var i = 0; i < data.length; i++) {
             ctx_data.data[i] = data[i];
         }
-      
-            ctx.putImageData(ctx_data, 0, 0);
-        });
-        var frames = {};
-        // var audioContext = new AudioContext();
-        // socket.on('audio', function (data) {
 
-        //     //data needs to be copied to an array.
-        //     var buffers = {
-        //         left: [],
-        //         right: []
-        //     };
-        //     /* for (let i = 0; i < data.length; i+=2) {*/
-        //     /* buffers.left.push(data[i] || 0);*/
-        //     /* buffers.right.push(data[i+1] || 0);*/
-        //     /* }*/
+        ctx.putImageData(ctx_data, 0, 0);
+    });
+    var frames = {};
+    // var audioContext = new AudioContext();
+    // socket.on('audio', function (data) {
 
-        //     var buffer = audioContext.createBuffer(1, data.length, 44150.56842105263);
-        //     buffer.getChannelData(0).set(data);
-        //     //buffer.getChannelData(1).set(buffers.right);
+    //     //data needs to be copied to an array.
+    //     var buffers = {
+    //         left: [],
+    //         right: []
+    //     };
+    //     /* for (let i = 0; i < data.length; i+=2) {*/
+    //     /* buffers.left.push(data[i] || 0);*/
+    //     /* buffers.right.push(data[i+1] || 0);*/
+    //     /* }*/
 
-        //     var source = audioContext.createBufferSource();
-        //     source.buffer = buffer;
-        //     source.connect(audioContext.destination);
-        //     source.start();
-        // });
+    //     var buffer = audioContext.createBuffer(1, data.length, 44150.56842105263);
+    //     buffer.getChannelData(0).set(data);
+    //     //buffer.getChannelData(1).set(buffers.right);
 
-        window.onkeydown = function (e) {
-            var keys = {
-                "37": "left",
-                "39": "right",
-                "38": "up",
-                "40": "down",
-                "90": "a",
-                "88": "b",
-                "13": "start",
-                "32": "select"
-            };
+    //     var source = audioContext.createBufferSource();
+    //     source.buffer = buffer;
+    //     source.connect(audioContext.destination);
+    //     source.start();
+    // });
 
-            if (keys[e.keyCode] != undefined) {
-                socket.emit('keydown', { key: keys[e.keyCode] });
-            } else {
-                if (e.keyCode === 27) {
-                    socket.emit('restart', {});
-                }
+    window.onkeydown = function (e) {
+        var keys = {
+            "37": "left",
+            "39": "right",
+            "38": "up",
+            "40": "down",
+            "90": "a",
+            "88": "b",
+            "13": "start",
+            "32": "select"
+        };
+
+        if (keys[e.keyCode] != undefined) {
+            socket.emit('keydown', { key: keys[e.keyCode] });
+        } else {
+            if (e.keyCode === 27) {
+                socket.emit('restart', {});
             }
         }
-
-        window.onkeyup = function (e) {
-            var keys = {
-                "37": "left",
-                "39": "right",
-                "38": "up",
-                "40": "down",
-                "90": "a",
-                "88": "b",
-                "13": "start",
-                "32": "select"
-            }
-            if (keys[e.keyCode]) {
-                socket.emit('keyup', { key: keys[e.keyCode] });
-            }
-        }
-
-        
     }
-    init();
 
-    module.exports = {getpeers}
-    
-    
+    window.onkeyup = function (e) {
+        var keys = {
+            "37": "left",
+            "39": "right",
+            "38": "up",
+            "40": "down",
+            "90": "a",
+            "88": "b",
+            "13": "start",
+            "32": "select"
+        }
+        if (keys[e.keyCode]) {
+            socket.emit('keyup', { key: keys[e.keyCode] });
+        }
+    }
 
-   
+
+}
+init();
+
+module.exports = { getpeers }
+
+
+
+
 
 
 

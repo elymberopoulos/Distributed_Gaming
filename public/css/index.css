@@ -5,6 +5,7 @@ body{
 #contentSection{
     margin-left: 35%;
     margin-top: 10%;
+    margin-bottom: 0%;
 }
 
 #actionButton {
@@ -17,3 +18,11 @@ body{
     background-color: #555555;
     color: white;
   }
+
+#chatSection{
+  margin-top: 0;
+  background-color: rgb(192, 192, 192);
+  width: 30%;
+  height: 100%;
+  align-content: center;
+}
