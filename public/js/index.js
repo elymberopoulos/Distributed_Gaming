@@ -88,7 +88,7 @@ function init() {
         console.log('Peer to peer connection established');
         //send interval messages to check that still connected with p2p
         setInterval(() => {
-            // peer.send('Connected');
+            peer.send('Connected');
             //This is where the backup localhost server would be started if the connection to the main server is lost.
             //When the peer to peer connection is triggered the backup server should start.
 
@@ -104,6 +104,7 @@ function init() {
     });
 
     peer.on('data', (data) => {
+        console.log(`Peer to peer data is ${data}.`);
         if(data === "Connected"){
             console.log(`Peer to peer data is ${data}.`);
         }else{
