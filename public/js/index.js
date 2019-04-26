@@ -4,23 +4,22 @@ const $ = require('jquery');
 const Peer = require("simple-peer");
 const BackUpEmulator = require('./BackupEmulator');
 const SimpleChat = require('./SimpleChat');
+const DB = require('../../DB/indexDB')
 let peers = []
 
 function setPeers(id) {
 
     peers.push(id);
-    console.log(peers[0])
-
+    DB.startDB(peers)
 }
 
 
-function getpeers() {
+/*function getpeers() {
     return peers;
-}
+}*/
 
 
 function init() {
-
     var chatAppend = $('#chatAppend');
     var submitChatBTN = $('#submitChat').on('click', ()=>{
         console.log($("#chatMessage").val());
@@ -240,12 +239,10 @@ function init() {
             socket.emit('keyup', { key: keys[e.keyCode] });
         }
     }
-
-
 }
 init();
 
-module.exports = { getpeers }
+
 
 
 
