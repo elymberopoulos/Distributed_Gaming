@@ -13,15 +13,18 @@
 	</head>
 
 	<body>
-  		<section id="contentSection">
+  		<section style="width:250px;height:250px" id="contentSection">
         	<main>Distributed Gaming</main>
 				<canvas id="mainCanvas"></canvas>
 		</section>
-
 		<!-- credits to Traversy Media on YouTube -->
 		<div class="container">
-			<div class="row">
 				<div class="col-md-8">
+					<label>Chat Log</label>
+					<div style="height:100px;width:500px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;" class="chat" id="chat"></div>
+				</div>
+			<div class="row">
+				<div class="col-md-4">
 					<div class="well">
 						<h6>Public Chat</h6>
 						<ul class="list-group" id="users"></ul>
@@ -33,10 +36,6 @@
 							<input type="submit" class="btn btn-primary" value = "Send Message" />
 						</div>
 					</form>
-				</div>
-				<div class="col-md-4">
-					<label>Chat Log</label>
-					<div style="background-color:lightgreen" class="chat" id="chat"></div>
 				</div>
 			</div>
 		</div>
