@@ -13,20 +13,24 @@
 	</head>
 
 	<body>
-  		<section style="width:250px;height:250px" id="contentSection">
-        	<main>Distributed Gaming</main>
+		<section style="width:550px;height:250px" id="contentSection">
+        	<main>
+			<h3>Distributed Gaming</h3>
 				<canvas id="mainCanvas"></canvas>
+			</main>
 		</section>
 		<!-- credits to Traversy Media on YouTube -->
 		<div class="container">
-				<div class="col-md-8">
-					<label>Chat Log</label>
-					<div style="height:100px;width:500px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;" class="chat" id="chat"></div>
+			<div class="col-md-8">
+				<h7>Chat Log</h7>
+				<div style="height:100px;width:500px;border:1px solid #ccc;font:16px/26px Georgia, Garamond, Serif;overflow:auto;" class="chat" id="chat">
 				</div>
+			</div>
+			<br />
 			<div class="row">
-				<div class="col-md-4">
+				<div class="col-md-8">
 					<div class="well">
-						<h6>Public Chat</h6>
+						<h7>Public Chat</h7>
 						<ul class="list-group" id="users"></ul>
 					</div>
 					<form id="messageForm">
@@ -39,7 +43,6 @@
 				</div>
 			</div>
 		</div>
-
 		<script src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>
 
