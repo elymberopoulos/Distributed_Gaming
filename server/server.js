@@ -15,7 +15,6 @@ const serverTimeout = 3;
 var app = express();
 var server = http.createServer(app);
 app.use(express.static(publicDir));//Express will use static middleware
-
 var io = socketIO(server);
 var currentScreen;
 var currentUsers = 0;
@@ -70,10 +69,11 @@ io.on('connection', function (socket) {
         console.log(`Server second signal is ${secondSignal}`);
         socket.broadcast.emit('2ndSignal', secondSignal);
     });
-    socket.on('StartP2PServer', ()=>{
+
+    socket.on('StartP2PServer', () => {
         // P2PServer.SetPort();
-        P2PServer.InitiateBackUpServer('start');
         io.emit('StartP2PServer');
+        P2PServer.InitiateBackUpServer('start');
     });
 
     //The new connection can send commands.
