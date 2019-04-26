@@ -15,8 +15,6 @@ function setPeers(id) {
 
 }
 
-
-
 function getpeers() {
     return peers;
 }
@@ -162,28 +160,6 @@ function init() {
         ctx.putImageData(ctx_data, 0, 0);
     });
     var frames = {};
-    // var audioContext = new AudioContext();
-    // socket.on('audio', function (data) {
-
-    //     //data needs to be copied to an array.
-    //     var buffers = {
-    //         left: [],
-    //         right: []
-    //     };
-    //     /* for (let i = 0; i < data.length; i+=2) {*/
-    //     /* buffers.left.push(data[i] || 0);*/
-    //     /* buffers.right.push(data[i+1] || 0);*/
-    //     /* }*/
-
-    //     var buffer = audioContext.createBuffer(1, data.length, 44150.56842105263);
-    //     buffer.getChannelData(0).set(data);
-    //     //buffer.getChannelData(1).set(buffers.right);
-
-    //     var source = audioContext.createBufferSource();
-    //     source.buffer = buffer;
-    //     source.connect(audioContext.destination);
-    //     source.start();
-    // });
 
     window.onkeydown = function (e) {
         keyDownSend(socket, e)
