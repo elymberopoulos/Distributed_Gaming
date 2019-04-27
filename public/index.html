@@ -46,25 +46,12 @@
 		<script src="/socket.io/socket.io.js"></script>
 		<script type="text/javascript" src="./js/webpack_output/webpackOutput.js"></script>
 
-		<script>
+		<!-- <script>
 			$(function(){
 				var socket = io.connect();
-				var $messageForm = $('#messageForm');
-				var $message = $('#message');
-				var $chat = $('#chat');
 
-				$messageForm.submit(function(e){
-					e.preventDefault();
-					socket.emit('send message', $message.val());
-					console.log('pressed submit');
-					$message.val('');
-				});
-
-				socket.on('new message', function(data){
-					$chat.append('<div class="well">'+data.msg+'</div>');
-				});
 			});
-		</script>
+		</script> -->
 
 	</body>
 

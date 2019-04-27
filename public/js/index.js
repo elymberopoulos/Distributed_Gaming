@@ -19,6 +19,8 @@ function getpeers() {
     return peers;
 }
 
+
+
 function init() {
 
     //establish connection to server with a socket
@@ -180,6 +182,22 @@ function init() {
             keyUpSend(socket, e);
         }
     }
+
+//SERVER CHAT
+    var $messageForm = $('#messageForm');
+    var $message = $('#message');
+    var $chat = $('#chat');
+
+    $messageForm.submit(function (e) {
+        e.preventDefault();
+        socket.emit('send message', $message.val());
+        console.log('pressed submit');
+        $message.val('');
+    });
+
+    socket.on('new message', function (data) {
+        $chat.append('<div class="well">' + data + '</div>');
+    });
 }
 init();
 

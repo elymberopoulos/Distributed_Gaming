@@ -101,7 +101,7 @@ io.on('connection', function (socket) {
 		//Send Message
 	socket.on('send message', function(data){
 		console.log(data);
-		io.sockets.emit('new message', {msg: data});
+		io.emit('new message', data);
 	});
 
     socket.on('shutDown', () => {

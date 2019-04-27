@@ -14,6 +14,16 @@ Run the below scripts in order. The first script installs all the npm packages n
 2. "npm run webpack"
 3. "npm run dev"
 
+## Tests
+
+To run the tests it depends on if you are running a server already or not. If the server is already running.
+
+"npm run test"
+
+Else you can launch the server and the tests together.
+
+"npm run combinedtest"
+
 ## Notable Frameworks and Technologies Used
 
 * Express.js *: A server framework for Node.js.*
