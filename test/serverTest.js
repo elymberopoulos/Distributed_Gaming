@@ -63,15 +63,15 @@ describe('Suite of unit tests', function () {
         });
     });
 
-    // it('Server can recieve and send out messeges',function(done){
-    //     socket.emit('send messege', 'pass');
+    it('Server can recieve and send out messages',function(done){
+        socket.emit('send message', 'pass');
 
-    //     socket.on('new message',function(data){
-    //         console.log(`THE TEST DATA IS ${data}.`);
-    //         assert.equal(data,'pass');
-    //         done();
-    //     });
-    // });
+        socket.on('new message',function(data){
+            console.log(`THE TEST DATA IS ${data}.`);
+            assert.equal(data,'pass');
+            done();
+        });
+    });
 });
 
 describe('disconnect test', function () {
