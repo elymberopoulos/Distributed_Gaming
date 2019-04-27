@@ -98,6 +98,12 @@ io.on('connection', function (socket) {
         io.emit('userDisconnect', adjustUserCount('decrement'));
     });
 
+		//Send Message
+	socket.on('send message', function(data){
+		console.log(data);
+		io.sockets.emit('new message', {msg: data});
+	});
+
     socket.on('shutDown', () => {
         console.group('Server is Shutting Down');
         currentUsers = 0;
