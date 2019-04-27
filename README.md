@@ -10,7 +10,7 @@ This project runs a JavaScript Gameboy emulator on a Node.js Express server that
 
 Run the below scripts in order. The first script installs all the npm packages necessary for the project. The second script created a webpack bundle that is used in the front-end part of the project in the index.html file. Lastly, the third script runs the nodemon server for localhost testing. The default port that it launches to is 127.0.0.1:8080.
 
-1. "npm run install"
+1. "npm install"
 2. "npm run webpack"
 3. "npm run dev"
 
